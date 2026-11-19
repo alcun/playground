@@ -16,6 +16,18 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : un
     {canonical && <link rel="canonical" href={canonical} />}
     {canonical && <meta property="og:url" content={canonical} />}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script is:inline>
+      // shadcn themes on a .dark class; follow the system, before first paint.
+      (function () {
+        var mq = matchMedia("(prefers-color-scheme: dark)");
+        var apply = function () {
+          document.documentElement.classList.toggle("dark", mq.matches);
+          dispatchEvent(new Event("playground:theme"));
+        };
+        apply();
+        mq.addEventListener("change", apply);
+      })();
+    </script>
   </head>
   <body>
     <slot />

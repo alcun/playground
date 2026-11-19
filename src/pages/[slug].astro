@@ -1,5 +1,6 @@
 ---
 import Base from "../layouts/Base.astro";
+import DemoPanel from "../components/DemoPanel.tsx";
 import { demos } from "../lib/registry";
 
 export function getStaticPaths() {
@@ -9,30 +10,13 @@ const { slug } = Astro.params;
 const { title, description } = Astro.props;
 ---
 <Base title={`${title} · Playground`} description={description}>
-  <div class="demo" data-slug={slug}>
-    <div class="stage"></div>
-    <aside class="side">
-      <p><a href="/">Playground</a> / {title}</p>
-      <div class="panel"></div>
+  <div class="fixed inset-0 grid grid-rows-[1fr_auto] md:grid-cols-[1fr_300px] md:grid-rows-1">
+    <div id="stage" class="stage relative overflow-hidden"></div>
+    <aside class="max-h-[45svh] overflow-y-auto border-t p-4 md:max-h-none md:border-t-0 md:border-l">
+      <p class="mb-4 text-sm text-muted-foreground">
+        <a href="/" class="hover:text-foreground">Playground</a> / <span class="text-foreground">{title}</span>
+      </p>
+      <DemoPanel client:load slug={slug} stageId="stage" />
     </aside>
   </div>
 </Base>
-<script>
-  import { createPanel } from "../lib/panel";
-  import type { Demo } from "../lib/types";
-
-  // Lazy, so each page downloads only its own demo.
-  const loaders = import.meta.glob<{ demo: Demo }>("../demos/*/demo.ts");
-  const root = document.querySelector<HTMLElement>(".demo")!;
-  const slug = root.dataset.slug!;
-  const stage = root.querySelector<HTMLElement>(".stage")!;
-  const panel = root.querySelector<HTMLElement>(".panel")!;
-  loaders[`../demos/${slug}/demo.ts`]().then(({ demo }) => {
-    let instance: ReturnType<Demo["mount"]> | undefined;
-    const params = createPanel(panel, slug, demo.controls, {
-      change: (p) => instance?.update(p),
-      reset: () => instance?.reset?.(),
-    });
-    instance = demo.mount(stage, params);
-  });
-</script>

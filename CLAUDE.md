@@ -3,6 +3,12 @@
 A static Astro site of small interactive demos. Each demo is one folder in
 `src/demos/<slug>/`. Read `src/lib/types.ts` and one existing demo before writing one.
 
+UI is shadcn/ui (radix, Nova preset, neutral) on Tailwind 4 with React islands.
+The control panel is `src/components/DemoPanel.tsx`; its state logic (URL hash,
+saved values, randomize) is plain functions in `src/lib/params.ts`. Demos stay
+framework-free: plain DOM, SVG or canvas. Add shadcn components with
+`npx shadcn@latest add <name>`.
+
 ## A demo
 
 - `demo.ts` exports `demo: Demo`. Folder name is the slug and URL. No registration step.
@@ -29,7 +35,10 @@ A static Astro site of small interactive demos. Each demo is one folder in
 
 ## Look and behaviour
 
-- Colours only from the tokens in `src/styles/global.css`. SVG demos use
+- Colours only from the demo tokens in `src/styles/global.css` (`--paper`, `--ink`,
+  `--ink-soft`, `--ink-faint`, `--hair`, `--glint`, `--rope`), which map onto
+  shadcn's theme. Do not use shadcn's `--accent` in a demo: it is a surface
+  colour, not a highlight. SVG demos use
   `var(--token)` in CSS; canvas demos read `tokens()` and re-read on
   `onThemeChange()`. Never hard-code a colour, never assume a theme.
   The exception is a colour that belongs to the subject (ink, paper, a glow):
@@ -47,7 +56,7 @@ A static Astro site of small interactive demos. Each demo is one folder in
 ## Before committing
 
 - `npm run build` passes (it type-checks first).
-- Look at it: light and dark, desktop and about 390px wide. Styling is
-  deliberately plain until a design pass; do not add any.
+- Look at it: light and dark, desktop and about 390px wide. Use shadcn's defaults
+  as they are; a design pass comes later, so do not restyle.
 - Update `CHANGELOG.md`: newest first, Added/Changed/Fixed/Removed as needed,
   sentence case, no emoji or em dashes.

@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Built on shadcn/ui: the index cards are shadcn cards and each toy's controls
+  are shadcn sliders, switches, inputs and buttons. Light and dark follow the system.
+
 ## 2026-11-19, cards
 
 ### Changed

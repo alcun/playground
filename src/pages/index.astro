@@ -1,47 +1,27 @@
 ---
 import Base from "../layouts/Base.astro";
+import { Card, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { demos } from "../lib/registry";
 ---
 <Base title="Playground" description="Small interactive demos with the knobs left on.">
-  <main>
-    <h1>Playground</h1>
-    <ul class="cards">
+  <main class="mx-auto max-w-5xl p-4 md:p-8">
+    <h1 class="mb-6 text-2xl font-semibold">Playground</h1>
+    <ul class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
       {demos.map((d) => (
         <li>
-          <a href={`/${d.slug}/`}>
-            <strong>{d.title}</strong>
-            <span>{d.description}</span>
+          <a href={`/${d.slug}/`} class="block aspect-square rounded-xl focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-hidden">
+            <Card className="h-full overflow-hidden transition-colors hover:bg-muted/50">
+              <CardHeader>
+                <CardTitle>{d.title}</CardTitle>
+                <CardDescription>{d.description}</CardDescription>
+              </CardHeader>
+            </Card>
           </a>
         </li>
       ))}
     </ul>
-    <p><a href="https://github.com/alcun/playground">Source</a></p>
+    <p class="mt-6 text-sm text-muted-foreground">
+      <a href="https://github.com/alcun/playground" class="underline underline-offset-4 hover:text-foreground">Source</a>
+    </p>
   </main>
 </Base>
-
-<style>
-  main { max-width: 960px; margin: 0 auto; padding: 16px; }
-  .cards {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 12px;
-  }
-  .cards a {
-    aspect-ratio: 1;
-    min-height: 0;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding: 14px;
-    border: 1px solid var(--hair);
-    color: var(--ink);
-    text-decoration: none;
-  }
-  .cards a:hover { border-color: var(--ink-faint); }
-  .cards span { color: var(--ink-soft); font-size: 14px; }
-  @media (max-width: 500px) { .cards a { padding: 12px; } .cards span { font-size: 13px; } }
-</style>

@@ -54,7 +54,7 @@ export const demo: Demo = {
 
     let width = 0, height = 0, frame = 0, last = 0;
     let text = lines(String(p.text), String(p.glint));
-    let colour = tokens(["ink", "ink-faint", "accent"]);
+    let colour = tokens(["ink", "ink-faint", "glint"]);
 
     function resize() {
       const r = canvas.getBoundingClientRect();
@@ -112,10 +112,10 @@ export const demo: Demo = {
               const n = line.chars.length;
               const i = (((col - textStep) % n) + n) % n;
               glyph = line.chars[i];
-              fill = line.glint[i] ? colour.accent : colour.ink;
+              fill = line.glint[i] ? colour.glint : colour.ink;
               a = line.glint[i] ? Math.min(1, alpha * 1.35) : alpha * 1.1;
             } else if (side === -1 && (col * 7 + row * 11) % 13 === 0) {
-              fill = colour.accent;
+              fill = colour.glint;
               a = alpha * 0.85;
             }
             ctx.globalAlpha = a;
@@ -143,7 +143,7 @@ export const demo: Demo = {
     const ro = new ResizeObserver(resize);
     ro.observe(canvas);
     const offTheme = onThemeChange(() => {
-      colour = tokens(["ink", "ink-faint", "accent"]);
+      colour = tokens(["ink", "ink-faint", "glint"]);
       draw(last);
     });
     start();

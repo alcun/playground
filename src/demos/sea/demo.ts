@@ -37,7 +37,7 @@ export const demo: Demo = {
     stage.append(canvas);
     const ctx = canvas.getContext("2d")!;
     let width = 0, height = 0, frame = 0, clock = 0, last = 0;
-    let colour = tokens(["ink", "ink-faint", "accent"]);
+    let colour = tokens(["ink", "ink-faint", "glint"]);
 
     function height_(x: number, z: number, t: number) {
       const len = 1 / Number(p.length), crest = Number(p.crest);
@@ -92,7 +92,7 @@ export const demo: Demo = {
           if (lines) {
             ci === 0 ? ctx.moveTo(sx, sy) : ctx.lineTo(sx, sy);
           } else {
-            ctx.fillStyle = lift > 0.8 ? colour.accent : lift > 0.45 ? colour.ink : colour["ink-faint"];
+            ctx.fillStyle = lift > 0.8 ? colour.glint : lift > 0.45 ? colour.ink : colour["ink-faint"];
             const size = dot * (0.5 + 1.5 * near);
             ctx.fillRect(sx - size / 2, sy - size / 2, size, size);
           }
@@ -123,7 +123,7 @@ export const demo: Demo = {
 
     const ro = new ResizeObserver(resize);
     ro.observe(canvas);
-    const offTheme = onThemeChange(() => { colour = tokens(["ink", "ink-faint", "accent"]); draw(); });
+    const offTheme = onThemeChange(() => { colour = tokens(["ink", "ink-faint", "glint"]); draw(); });
     start();
 
     return {

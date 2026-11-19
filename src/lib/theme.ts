@@ -4,11 +4,10 @@ export function tokens<K extends string>(names: K[]): Record<K, string> {
   return Object.fromEntries(names.map((n) => [n, cs.getPropertyValue(`--${n}`).trim()])) as Record<K, string>;
 }
 
-/** Fires when the system theme changes. Returns an unsubscribe. */
+/** Fires after the theme class has changed, so tokens() reads the new colours. Returns an unsubscribe. */
 export function onThemeChange(cb: () => void): () => void {
-  const mq = matchMedia("(prefers-color-scheme: dark)");
-  mq.addEventListener("change", cb);
-  return () => mq.removeEventListener("change", cb);
+  addEventListener("playground:theme", cb);
+  return () => removeEventListener("playground:theme", cb);
 }
 
 export const reducedMotion = () => matchMedia("(prefers-reduced-motion: reduce)").matches;

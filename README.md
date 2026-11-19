@@ -4,8 +4,8 @@ Small interactive demos with the knobs left on. Every demo gets a control panel
 with Reset, Randomize and Copy values, and its settings live in the URL, so a
 link reproduces exactly what you were looking at.
 
-Static Astro site, no framework runtime, no database. Styling is plain on
-purpose for now.
+Static Astro site with shadcn/ui (Tailwind 4, React islands for the control
+panel). No database. Demos themselves are plain DOM, SVG or canvas.
 
 ## Run it
 
