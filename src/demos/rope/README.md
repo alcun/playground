@@ -22,3 +22,6 @@ tick: integrate free points (velocity * damping + gravity)
 - The visible stroke is thin; an invisible hit stroke 24px wide (52px on touch) takes the pointer.
 - iOS can start a native scroll on an SVG stroke despite `touch-action`, so
   `touchmove` is cancelled while a grab is held.
+
+The Verlet chain started from guerrillacontra's CodePen and was ported from the
+footer of alcun.dev.

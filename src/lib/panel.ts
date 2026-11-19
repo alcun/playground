@@ -26,7 +26,10 @@ export function createPanel(
         const n = Number(v);
         if (Number.isFinite(n)) out[c.key] = clamp(n, c.min, c.max);
       } else if (c.type === "toggle") out[c.key] = v === true || v === "1" || v === "true";
-      else out[c.key] = String(v);
+      else if (c.type === "colour") {
+        const hex = String(v).replace(/^#?/, "#");
+        if (/^#[0-9a-f]{6}$/i.test(hex)) out[c.key] = hex.toLowerCase();
+      } else out[c.key] = String(v);
     }
     return out;
   }
@@ -107,6 +110,16 @@ export function createPanel(
       });
       inputs.set(c.key, write);
       wrap.append(label, input);
+    } else if (c.type === "colour") {
+      const input = Object.assign(document.createElement("input"), { type: "color", id });
+      const write = (v: Params[string]) => { input.value = String(v); };
+      write(params[c.key]);
+      input.addEventListener("input", () => {
+        params = { ...params, [c.key]: input.value };
+        commit();
+      });
+      inputs.set(c.key, write);
+      wrap.append(label, input);
     } else {
       const input = Object.assign(document.createElement("input"), { type: "text", id, spellcheck: false });
       const write = (v: Params[string]) => { input.value = String(v); };
@@ -131,6 +144,7 @@ function randomize(controls: Control[], current: Params): Params {
       const steps = Math.round((c.max - c.min) / c.step);
       next[c.key] = round(c.min + Math.floor(Math.random() * (steps + 1)) * c.step, c.step);
     } else if (c.type === "toggle") next[c.key] = Math.random() < 0.5;
+    else if (c.type === "colour") next[c.key] = "#" + Math.floor(Math.random() * 0x1000000).toString(16).padStart(6, "0");
     // Text is left alone: random strings are never what anyone wanted.
   }
   return next;

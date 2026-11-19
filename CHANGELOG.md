@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Orb: Heyra's raymarched light sphere. Hold to talk to it, let go and it turns gold.
+- Sea: a rolling sea from four summed waves, as lines or dots, with wind and camera controls.
+- Ink brush: the Sumicat sumi brush painting an enso. Paint your own strokes; every stroke repaints as the brush changes.
+- A colour control for colours that belong to the subject.
+
 ## 2026-11-19
 
 ### Added

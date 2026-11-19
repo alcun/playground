@@ -31,6 +31,10 @@ A static Astro site of small interactive demos. Each demo is one folder in
 - Colours only from the tokens in `src/styles/global.css`. SVG demos use
   `var(--token)` in CSS; canvas demos read `tokens()` and re-read on
   `onThemeChange()`. Never hard-code a colour, never assume a theme.
+  The exception is a colour that belongs to the subject (ink, paper, a glow):
+  make it a `colour` control so it is visible and tunable, not buried.
+- Vendored code (the brush) is changed at its source, then copied. Say where it
+  came from in its first line.
 - Works at 375px wide with 44px tap targets. Pointer events, not mouse events;
   no hover-only behaviour. Give thin draggable things a wide invisible hit area.
 - Respect `prefers-reduced-motion`: a still frame or motion only on interaction.

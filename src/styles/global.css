@@ -110,6 +110,8 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid 
 .control output { font: 500 12px/1.5 var(--mono); color: var(--ink); font-variant-numeric: tabular-nums; }
 .control.toggle { grid-template-columns: 1fr auto; align-items: center; }
 .control.text { gap: 4px; }
+.control.colour { grid-template-columns: 1fr auto; align-items: center; }
+.control input[type="color"] { width: var(--tap); height: 32px; padding: 0; border: 1px solid var(--hair); border-radius: 8px; background: none; cursor: pointer; }
 .control input[type="text"] {
   font: 14px/1.4 var(--sans);
   color: var(--ink);

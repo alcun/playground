@@ -10,7 +10,9 @@ export type Range = {
 };
 export type Toggle = { type: "toggle"; key: string; label: string; value: boolean };
 export type Text = { type: "text"; key: string; label: string; value: string };
-export type Control = Range | Toggle | Text;
+/** A hex colour, #rrggbb. Use for colours that are part of the subject, not the theme. */
+export type Colour = { type: "colour"; key: string; label: string; value: string };
+export type Control = Range | Toggle | Text | Colour;
 
 export type Params = Record<string, number | boolean | string>;
 
