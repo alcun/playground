@@ -46,8 +46,6 @@ export const demo: Demo = {
   ],
   mount(stage, initial) {
     let p: Params = initial;
-    // Posed for its thumbnail: bigger cells read at card size.
-    if (document.documentElement.classList.contains("thumb")) p = { ...p, cell: 22, amplitude: 110, thickness: 130 };
     const canvas = document.createElement("canvas");
     canvas.setAttribute("aria-hidden", "true");
     Object.assign(canvas.style, { position: "absolute", inset: "0", width: "100%", height: "100%", display: "block" });

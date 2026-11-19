@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Plain styling for now: a simple list of toys, native controls beside each
+  toy, light and dark from the system. A design pass comes later.
+
+### Removed
+
+- Preview images, the theme switch and the custom styling.
+
 ## 2026-11-19, later
 
 ### Changed

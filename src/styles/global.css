@@ -1,239 +1,50 @@
-/* A console. The toy gets the whole screen; the controls are a small floating
-   panel, dense and monospaced, like a devtools tweak pane.
+/* Deliberately plain: native controls, system font, light and dark from the system.
+   A design pass comes later.
 
    Demos use these tokens and nothing else, so light and dark come free.
-   Canvas demos read them with tokens() from src/lib/theme.ts.
-     --paper   the ground every demo draws on
-     --panel   the console surface
-     --ink     text and marks; -soft and -faint step back from it
-     --hair    rules and outlines
-     --accent  focus, active controls, glints. Use sparingly.
-     --rope    the rope demo's fibre */
+   Canvas demos read them with tokens() from src/lib/theme.ts. */
 :root {
-  color-scheme: light;
-  --paper: #f3f4f4;
-  --panel: #ffffff;
-  --well: #e6e8e9;
-  --ink: #1a1c1e;
-  --ink-soft: #55595d;
-  --ink-faint: #8d9296;
-  --hair: #d9dcde;
-  --accent: #d48a00;
+  color-scheme: light dark;
+  --paper: #ffffff;
+  --ink: #111111;
+  --ink-soft: #555555;
+  --ink-faint: #999999;
+  --hair: #dddddd;
+  --accent: #c27c0e;
   --rope: #a8683a;
-  --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
-  --row: 28px;
 }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-    --paper: #111314;
-    --panel: #181a1c;
-    --well: #26292c;
-    --ink: #dadddf;
-    --ink-soft: #9ba1a5;
-    --ink-faint: #61676b;
-    --hair: #2c3033;
+  :root {
+    --paper: #121212;
+    --ink: #eeeeee;
+    --ink-soft: #aaaaaa;
+    --ink-faint: #666666;
+    --hair: #333333;
     --accent: #f2b232;
     --rope: #c98f5c;
   }
 }
-:root[data-theme="dark"] {
-  color-scheme: dark;
-  --paper: #111314;
-  --panel: #181a1c;
-  --well: #26292c;
-  --ink: #dadddf;
-  --ink-soft: #9ba1a5;
-  --ink-faint: #61676b;
-  --hair: #2c3033;
-  --accent: #f2b232;
-  --rope: #c98f5c;
-}
-@media (pointer: coarse) { :root { --row: 40px; } }
 
-*, *::before, *::after { box-sizing: border-box; }
-html, body { margin: 0; }
-body {
-  background: var(--paper);
-  color: var(--ink);
-  font: 400 13px/1.5 var(--mono);
-  -webkit-font-smoothing: antialiased;
-}
-a { color: inherit; }
-:focus-visible { outline: 1.5px solid var(--accent); outline-offset: 2px; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.5 system-ui, sans-serif; }
 
-button {
-  font: inherit;
-  color: var(--ink-soft);
-  background: none;
-  border: 0;
-  padding: 0 8px;
-  min-height: var(--row);
-  cursor: pointer;
-}
-button:hover { color: var(--ink); }
-/* Text buttons in brackets, the way a terminal UI marks something pressable. */
-button.cmd::before { content: "["; color: var(--ink-faint); }
-button.cmd::after { content: "]"; color: var(--ink-faint); }
-.theme { color: var(--ink-faint); }
-
-/* ---- Demo page ---- */
-
-.demo { position: fixed; inset: 0; background: var(--paper); }
-.stage { position: absolute; inset: 0; overflow: hidden; }
-
-.crumb {
-  position: absolute;
-  top: 10px; left: 12px;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  color: var(--ink-faint);
-}
-.crumb a { text-decoration: none; padding: 4px 2px; }
-.crumb a:hover { color: var(--ink); }
-.crumb h1 { margin: 0; font: inherit; color: var(--ink-soft); }
-
-.console {
-  position: absolute;
-  z-index: 3;
-  top: 10px; right: 10px;
-  width: 320px;
-  max-height: calc(100% - 20px);
-  display: flex;
-  flex-direction: column;
-  background: var(--panel);
-  border: 1px solid var(--hair);
-  overflow: hidden;
-}
-.console-bar {
-  display: flex;
-  align-items: center;
-  min-height: var(--row);
-  padding-left: 10px;
-  border-bottom: 1px solid var(--hair);
-  color: var(--ink-faint);
-}
-.console-bar .title { flex: 1; }
-.console-bar button { padding: 0 10px; }
-.console.closed .console-bar { border-bottom: 0; }
-.console.closed .panel { display: none; }
-.panel { overflow-y: auto; overscroll-behavior: contain; padding: 6px 10px 8px; }
-
-@media (max-width: 640px) {
-  .console {
-    top: auto; bottom: 0; left: 0; right: 0;
-    width: auto;
-    max-height: 48svh;
-    border-width: 1px 0 0;
-  }
+.demo { position: fixed; inset: 0; display: grid; grid-template-columns: 1fr 280px; }
+.stage { position: relative; overflow: hidden; }
+.side { border-left: 1px solid var(--hair); padding: 12px; overflow-y: auto; }
+.side p { margin: 0 0 12px; }
+@media (max-width: 700px) {
+  .demo { grid-template-columns: 1fr; grid-template-rows: 1fr auto; }
+  .side { border-left: 0; border-top: 1px solid var(--hair); max-height: 45svh; }
 }
 
-/* Rows: label on the left, control on the right. */
-.controls { display: grid; }
-.control {
-  display: grid;
-  grid-template-columns: 38% 1fr;
-  align-items: center;
-  gap: 8px;
-  min-height: var(--row);
-}
-.control label {
-  color: var(--ink-soft);
-  text-transform: lowercase;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.control .head { display: contents; }
-.control.range { grid-template-columns: 38% 1fr 5.5ch; }
-.control.range input { grid-column: 2; grid-row: 1; }
-.control.range output { grid-column: 3; grid-row: 1; text-align: right; color: var(--ink); }
-.control.text { grid-template-columns: 38% 1fr; }
-
-.control input[type="text"] {
-  font: inherit;
-  color: var(--ink);
-  background: var(--well);
-  border: 0;
-  border-radius: 0;
-  height: calc(var(--row) - 6px);
-  padding: 0 6px;
-  width: 100%;
-  min-width: 0;
-}
-
-input[type="range"] {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%;
-  min-width: 0;
-  height: var(--row);
-  margin: 0;
-  background: transparent;
-  cursor: ew-resize;
-  --fill: 50%;
-}
-input[type="range"]::-webkit-slider-runnable-track {
-  height: 3px;
-  border-radius: 0;
-  background: linear-gradient(to right, var(--ink-soft) var(--fill), var(--well) var(--fill));
-}
-input[type="range"]::-moz-range-track { height: 3px; border-radius: 0; background: var(--well); }
-input[type="range"]::-moz-range-progress { height: 3px; border-radius: 0; background: var(--ink-soft); }
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 6px; height: 13px; margin-top: -5px;
-  border-radius: 0;
-  background: var(--ink);
-  border: 0;
-}
-input[type="range"]::-moz-range-thumb { width: 6px; height: 13px; border-radius: 0; background: var(--ink); border: 0; }
-input[type="range"]:active::-webkit-slider-thumb { background: var(--accent); }
-input[type="range"]:active::-moz-range-thumb { background: var(--accent); }
-@media (pointer: coarse) {
-  input[type="range"]::-webkit-slider-thumb { width: 10px; height: 22px; margin-top: -9.5px; }
-  input[type="range"]::-moz-range-thumb { width: 10px; height: 22px; }
-}
-
-/* A toggle reads as [x] or [ ]. */
-.control input[type="checkbox"] {
-  appearance: none;
-  -webkit-appearance: none;
-  justify-self: start;
-  margin: 0;
-  width: auto; height: var(--row);
-  background: none;
-  cursor: pointer;
-  font: inherit;
-  color: var(--ink-faint);
-}
-.control input[type="checkbox"]::after { content: "[ ]"; line-height: var(--row); }
-.control input[type="checkbox"]:checked { color: var(--ink); }
-.control input[type="checkbox"]:checked::after { content: "[x]"; }
-
-.control input[type="color"] {
-  justify-self: start;
-  width: 40px; height: 16px; padding: 0;
-  border: 1px solid var(--hair); border-radius: 0; background: none; cursor: pointer;
-}
-.control input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
-.control input[type="color"]::-webkit-color-swatch { border: 0; border-radius: 0; }
-.control input[type="color"]::-moz-color-swatch { border: 0; border-radius: 0; }
-
-.actions {
-  display: flex;
-  margin: 6px -8px 0;
-  padding-top: 4px;
-  border-top: 1px solid var(--hair);
-}
-.actions button:first-child { color: var(--ink); }
-.actions button:last-child { margin-left: auto; }
-
-/* Thumbnail capture: just the stage. */
-html.thumb .crumb, html.thumb .console { display: none; }
+.control { display: grid; margin-bottom: 8px; }
+.control .head { display: flex; justify-content: space-between; }
+.control label { color: var(--ink-soft); }
+.control.toggle, .control.colour { grid-template-columns: 1fr auto; align-items: center; }
+.control input[type="range"], .control input[type="text"] { width: 100%; }
+.actions { display: flex; gap: 6px; margin-top: 12px; }
+.actions button { min-height: 36px; }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { transition: none !important; animation: none !important; }
+  * { transition: none !important; animation: none !important; }
 }

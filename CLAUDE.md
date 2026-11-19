@@ -24,7 +24,7 @@ A static Astro site of small interactive demos. Each demo is one folder in
   memory and the URL hash for free.
 - Ranges should be wide enough to break things a little. That is the fun.
 - Name controls for what you see ("Height", "Wind"), not the variable, in one or two
-  short words: the console column is narrow and labels truncate.
+  short words.
 - Randomize leaves text controls alone.
 
 ## Look and behaviour
@@ -44,18 +44,10 @@ A static Astro site of small interactive demos. Each demo is one folder in
   the explanation lives in the demo's README.
 - No new dependencies without a reason a demo cannot meet without them.
 
-## Thumbnails
-
-- Every demo has `public/thumbs/<slug>-light.webp` and `-dark.webp`, captured
-  by `npm run thumbs` from `/<slug>/?thumb&theme=light|dark` against a running
-  preview. Recapture a demo's pair in the same commit as any visual change.
-  Look at them before committing; a stale thumbnail is worse than none.
-- If the default state makes a dull still, a demo may pose itself when
-  `document.documentElement.classList.contains("thumb")`. Pose only; no other behaviour.
-
 ## Before committing
 
 - `npm run build` passes (it type-checks first).
-- Look at it: light and dark, desktop and about 390px wide.
+- Look at it: light and dark, desktop and about 390px wide. Styling is
+  deliberately plain until a design pass; do not add any.
 - Update `CHANGELOG.md`: newest first, Added/Changed/Fixed/Removed as needed,
   sentence case, no emoji or em dashes.

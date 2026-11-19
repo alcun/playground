@@ -1,6 +1,5 @@
 ---
 import Base from "../layouts/Base.astro";
-import ThemeButton from "../components/ThemeButton.astro";
 import { demos } from "../lib/registry";
 
 export function getStaticPaths() {
@@ -12,17 +11,10 @@ const { title, description } = Astro.props;
 <Base title={`${title} · Playground`} description={description}>
   <div class="demo" data-slug={slug}>
     <div class="stage"></div>
-    <nav class="crumb">
-      <a href="/">~/playground</a><span aria-hidden="true">/</span><h1>{slug}</h1>
-    </nav>
-    <section class="console" aria-label="Controls">
-      <div class="console-bar">
-        <span class="title">{slug}</span>
-        <ThemeButton />
-        <button type="button" class="console-toggle" aria-expanded="true" aria-controls="panel">_</button>
-      </div>
-      <div class="panel" id="panel"></div>
-    </section>
+    <aside class="side">
+      <p><a href="/">Playground</a> / {title}</p>
+      <div class="panel"></div>
+    </aside>
   </div>
 </Base>
 <script>
@@ -35,19 +27,6 @@ const { title, description } = Astro.props;
   const slug = root.dataset.slug!;
   const stage = root.querySelector<HTMLElement>(".stage")!;
   const panel = root.querySelector<HTMLElement>(".panel")!;
-  const consoleEl = root.querySelector<HTMLElement>(".console")!;
-  const toggle = root.querySelector<HTMLButtonElement>(".console-toggle")!;
-
-  // Collapsed to its title bar on a phone to start with, so the toy is seen first.
-  const show = (open: boolean) => {
-    consoleEl.classList.toggle("closed", !open);
-    toggle.setAttribute("aria-expanded", String(open));
-    toggle.textContent = open ? "_" : "+";
-    toggle.setAttribute("aria-label", open ? "Hide controls" : "Show controls");
-  };
-  show(!matchMedia("(max-width: 640px)").matches);
-  toggle.addEventListener("click", () => show(consoleEl.classList.contains("closed")));
-
   loaders[`../demos/${slug}/demo.ts`]().then(({ demo }) => {
     let instance: ReturnType<Demo["mount"]> | undefined;
     const params = createPanel(panel, slug, demo.controls, {
