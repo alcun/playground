@@ -1,0 +1,50 @@
+---
+import Base from "../layouts/Base.astro";
+import ThemeButton from "../components/ThemeButton.astro";
+import { demos } from "../lib/registry";
+
+export function getStaticPaths() {
+  return demos.map((d) => ({ params: { slug: d.slug }, props: { title: d.title, description: d.description } }));
+}
+const { slug } = Astro.params;
+const { title, description } = Astro.props;
+---
+<Base title={`${title} · Playground`} description={description}>
+  <div class="demo" data-slug={slug}>
+    <header class="bar">
+      <a class="home" href="/">PLAYGROUND</a>
+      <h1>{title}</h1>
+      <span class="spacer"></span>
+      <button type="button" class="panel-toggle" aria-expanded="true" aria-controls="panel">Controls</button>
+      <ThemeButton />
+    </header>
+    <div class="stage"></div>
+    <aside class="panel" id="panel" aria-label="Controls"></aside>
+  </div>
+</Base>
+<script>
+  import { createPanel } from "../lib/panel";
+  import type { Demo } from "../lib/types";
+
+  // Lazy, so each page downloads only its own demo.
+  const loaders = import.meta.glob<{ demo: Demo }>("../demos/*/demo.ts");
+  const root = document.querySelector<HTMLElement>(".demo")!;
+  const slug = root.dataset.slug!;
+  const stage = root.querySelector<HTMLElement>(".stage")!;
+  const panel = root.querySelector<HTMLElement>(".panel")!;
+  const toggle = root.querySelector<HTMLButtonElement>(".panel-toggle")!;
+
+  toggle.addEventListener("click", () => {
+    const closed = panel.classList.toggle("closed");
+    toggle.setAttribute("aria-expanded", String(!closed));
+  });
+
+  loaders[`../demos/${slug}/demo.ts`]().then(({ demo }) => {
+    let instance: ReturnType<Demo["mount"]> | undefined;
+    const params = createPanel(panel, slug, demo.controls, {
+      change: (p) => instance?.update(p),
+      reset: () => instance?.reset?.(),
+    });
+    instance = demo.mount(stage, params);
+  });
+</script>

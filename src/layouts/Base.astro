@@ -1,0 +1,38 @@
+---
+import "../styles/global.css";
+interface Props { title: string; description: string }
+const { title, description } = Astro.props;
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {canonical && <link rel="canonical" href={canonical} />}
+    {canonical && <meta property="og:url" content={canonical} />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script is:inline>
+      // Before paint, so a stored theme never flashes the other one.
+      try { var t = localStorage.getItem("playground:theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <slot />
+    <script is:inline>
+      document.addEventListener("click", function (e) {
+        var b = e.target.closest && e.target.closest(".theme");
+        if (!b) return;
+        var root = document.documentElement;
+        var dark = root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+        root.dataset.theme = dark ? "light" : "dark";
+        try { localStorage.setItem("playground:theme", root.dataset.theme); } catch (err) {}
+        dispatchEvent(new Event("playground:theme"));
+      });
+    </script>
+  </body>
+</html>
