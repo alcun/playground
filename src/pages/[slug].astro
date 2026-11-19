@@ -11,8 +11,9 @@ const { title, description } = Astro.props;
 ---
 <Base title={`${title} · Playground`} description={description}>
   <div class="demo" data-slug={slug}>
-    <header class="bar">
-      <a class="home" href="/">PLAYGROUND</a>
+    <header class="top">
+      <a class="home" href="/">playground</a>
+      <span class="slash" aria-hidden="true">/</span>
       <h1>{title}</h1>
       <span class="spacer"></span>
       <button type="button" class="panel-toggle" aria-expanded="true" aria-controls="panel">Controls</button>

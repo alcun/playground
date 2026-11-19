@@ -1,5 +1,19 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- A new look. The index is a painted pegboard with each toy hung on a peg, and
+  the word playground hangs from a rope you can grab and swing.
+- Demo pages sit on a plain bench with the controls on a faceplate beside them:
+  proper sliders, switches, and Randomize as the main button.
+- Light and dark themes are a sage board and a deep workshop green.
+
+### Added
+
+- Thumbnails for every toy on the index, in light and dark.
+
 ## 2026-11-19
 
 ### Added

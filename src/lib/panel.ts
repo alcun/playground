@@ -59,8 +59,8 @@ export function createPanel(
   const actions = document.createElement("div");
   actions.className = "actions";
   actions.append(
-    button("Reset", () => { set({ ...defaults }); hooks.reset?.(); }),
     button("Randomize", () => set(randomize(controls, params))),
+    button("Reset", () => { set({ ...defaults }); hooks.reset?.(); }),
     button("Copy values", (b) => {
       const text = JSON.stringify(params, null, 2);
       navigator.clipboard?.writeText(text).then(
@@ -85,14 +85,17 @@ export function createPanel(
       const input = Object.assign(document.createElement("input"), {
         type: "range", id, min: String(c.min), max: String(c.max), step: String(c.step),
       });
+      const fill = () => input.style.setProperty("--fill", `${((Number(input.value) - c.min) / (c.max - c.min)) * 100}%`);
       const write = (v: Params[string]) => {
         input.value = String(v);
         out.textContent = format(Number(v), c);
+        fill();
       };
       write(params[c.key]);
       input.addEventListener("input", () => {
         params = { ...params, [c.key]: Number(input.value) };
         out.textContent = format(Number(input.value), c);
+        fill();
         commit();
       });
       inputs.set(c.key, write);

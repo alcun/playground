@@ -1,42 +1,59 @@
-/* Colour tokens. Demos use these and nothing else, so light and dark come free.
-   Canvas demos read them with tokens() from src/lib/theme.ts. */
+@import "@fontsource-variable/bricolage-grotesque/standard.css";
+
+/* A workshop wall. The index is painted pegboard with the toys hung on it;
+   a demo page is one toy taken down onto the bench.
+
+   Demos use these tokens and nothing else, so light and dark come free.
+   Canvas demos read them with tokens() from src/lib/theme.ts.
+     --board   the painted pegboard (index, panel)
+     --paper   the bench a demo sits on
+     --ink     text and marks; -soft and -faint step back from it
+     --hair    rules and outlines
+     --accent  safety amber: focus, active controls, glints. Use sparingly.
+     --rope    hemp */
 :root {
   color-scheme: light;
-  --paper: #f4f1ea;
-  --paper-2: #ebe6db;
-  --ink: #1d1c1a;
-  --ink-soft: #55524b;
-  --ink-faint: #8b877d;
-  --hair: #d8d2c4;
-  --accent: #a8742c;
-  --rope: #9a7246;
-  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --board: #d6ddd3;
+  --board-deep: #c3ccc0;
+  --hole: #a7b2a4;
+  --paper: #eef1ec;
+  --ink: #18211d;
+  --ink-soft: #46524b;
+  --ink-faint: #85918a;
+  --hair: #bfc8bc;
+  --accent: #d98c0b;
+  --rope: #a8683a;
+  --sans: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
   --tap: 44px;
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
-    --paper: #121416;
-    --paper-2: #1b1e21;
-    --ink: #e8e4da;
-    --ink-soft: #b3ada1;
-    --ink-faint: #7d8790;
-    --hair: #2b3035;
-    --accent: #d9a86a;
-    --rope: #c49a64;
+    --board: #1b2e28;
+    --board-deep: #15251f;
+    --hole: #0c1713;
+    --paper: #102019;
+    --ink: #e4ebe5;
+    --ink-soft: #a6b4ab;
+    --ink-faint: #6a7c72;
+    --hair: #2a4037;
+    --accent: #f2b232;
+    --rope: #c98f5c;
   }
 }
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --paper: #121416;
-  --paper-2: #1b1e21;
-  --ink: #e8e4da;
-  --ink-soft: #b3ada1;
-  --ink-faint: #7d8790;
-  --hair: #2b3035;
-  --accent: #d9a86a;
-  --rope: #c49a64;
+  --board: #1b2e28;
+  --board-deep: #15251f;
+  --hole: #0c1713;
+  --paper: #102019;
+  --ink: #e4ebe5;
+  --ink-soft: #a6b4ab;
+  --ink-faint: #6a7c72;
+  --hair: #2a4037;
+  --accent: #f2b232;
+  --rope: #c98f5c;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -44,88 +61,195 @@ html, body { margin: 0; }
 body {
   background: var(--paper);
   color: var(--ink);
-  font: 400 15px/1.5 var(--sans);
+  font: 400 16px/1.5 var(--sans);
+  font-variant-numeric: tabular-nums;
   -webkit-font-smoothing: antialiased;
 }
 a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
 button {
-  font: 500 13px/1 var(--mono);
+  font: 500 15px/1 var(--sans);
   color: var(--ink);
-  background: var(--paper-2);
-  border: 1px solid var(--hair);
-  border-radius: 999px;
+  background: transparent;
+  border: 1.5px solid var(--ink);
+  border-radius: 10px;
   min-height: var(--tap);
   padding: 0 16px;
   cursor: pointer;
+  transition: background 0.15s var(--ease), color 0.15s var(--ease);
 }
-button:hover { border-color: var(--ink-faint); }
-button:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button:hover { background: var(--ink); color: var(--paper); }
+button:active { transform: translateY(1px); }
 
-.bar {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 0 16px;
-  min-height: 56px;
-  border-bottom: 1px solid var(--hair);
+/* The theme switch: a little sun that is half eclipsed. */
+.theme {
+  width: var(--tap);
+  padding: 0;
+  border: 0;
+  display: grid;
+  place-items: center;
+  color: var(--ink-soft);
 }
-.bar .home { font: 500 13px/1 var(--mono); letter-spacing: 0.08em; text-decoration: none; color: var(--ink-soft); }
-.bar h1 { margin: 0; font: 500 15px/1 var(--sans); }
-.bar .spacer { flex: 1; }
-.theme { width: var(--tap); padding: 0; }
+.theme:hover { background: none; color: var(--ink); }
 
-/* Demo page: stage and panel. Panel to the side on desktop, below on a phone,
-   never on top of the thing being tuned. */
+/* ---- Demo page: the toy on the bench, its faceplate beside it ---- */
+
 .demo {
   height: 100svh;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
-}
-.stage { position: relative; overflow: hidden; min-height: 0; }
-.panel {
-  border-top: 1px solid var(--hair);
   background: var(--paper);
-  max-height: 42svh;
+}
+.top {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 8px 6px 16px;
+}
+.top .home {
+  font-weight: 700;
+  font-stretch: 75%;
+  font-size: 17px;
+  text-decoration: none;
+  color: var(--ink-soft);
+  padding: 10px 0;
+}
+.top .home:hover { color: var(--ink); }
+.top .slash { color: var(--ink-faint); padding: 0 6px; }
+.top h1 { margin: 0; font-size: 17px; font-weight: 500; }
+.top .spacer { flex: 1; }
+.panel-toggle { min-height: 36px; font-size: 14px; }
+
+.stage { position: relative; overflow: hidden; min-height: 0; }
+
+.panel {
+  background: var(--board);
+  max-height: 44svh;
   overflow-y: auto;
-  padding: 8px 16px 16px;
+  overscroll-behavior: contain;
+  padding: 14px 16px 20px;
+  border-radius: 18px 18px 0 0;
 }
 .panel-toggle { display: none; }
 @media (max-width: 799px) {
   .panel-toggle { display: inline-flex; align-items: center; }
-  .panel.closed .controls, .panel.closed .actions { display: none; }
+  .panel.closed { padding-block: 0; }
+  .panel.closed > * { display: none; }
 }
 @media (min-width: 800px) {
   .demo {
-    grid-template-columns: minmax(0, 1fr) 300px;
+    grid-template-columns: minmax(0, 1fr) 320px;
     grid-template-rows: auto minmax(0, 1fr);
   }
-  .demo .bar { grid-column: 1 / -1; }
-  .panel { max-height: none; border-top: 0; border-left: 1px solid var(--hair); padding-top: 16px; }
+  .demo .top { grid-column: 1; }
+  .demo .stage { grid-column: 1; grid-row: 2; }
+  .panel {
+    grid-column: 2;
+    grid-row: 1 / -1;
+    max-height: none;
+    border-radius: 0;
+    padding: 20px 22px 28px;
+  }
 }
 
-.controls { display: grid; gap: 4px; }
+/* Controls. A slider is a groove with a knob in it; the readout sits on the label line. */
+.controls { display: grid; gap: 2px; }
 .control { min-height: var(--tap); display: grid; align-content: center; }
-.control .head { display: flex; justify-content: space-between; gap: 8px; }
-.control label { font-size: 13px; color: var(--ink-soft); }
-.control output { font: 500 12px/1.5 var(--mono); color: var(--ink); font-variant-numeric: tabular-nums; }
-.control.toggle { grid-template-columns: 1fr auto; align-items: center; }
-.control.text { gap: 4px; }
-.control.colour { grid-template-columns: 1fr auto; align-items: center; }
-.control input[type="color"] { width: var(--tap); height: 32px; padding: 0; border: 1px solid var(--hair); border-radius: 8px; background: none; cursor: pointer; }
+.control .head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.control label { font-size: 14px; color: var(--ink-soft); }
+.control output { font-size: 14px; font-weight: 600; color: var(--ink); }
+.control.toggle, .control.colour { grid-template-columns: 1fr auto; align-items: center; }
+.control.text { gap: 6px; padding-block: 4px; }
+
 .control input[type="text"] {
-  font: 14px/1.4 var(--sans);
+  font: 15px/1.4 var(--sans);
   color: var(--ink);
-  background: var(--paper-2);
-  border: 1px solid var(--hair);
-  border-radius: 8px;
+  background: var(--paper);
+  border: 0;
+  border-radius: 10px;
   min-height: var(--tap);
-  padding: 0 10px;
+  padding: 0 12px;
   width: 100%;
 }
-.control input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--accent); margin: 11px; }
-input[type="range"] { width: 100%; height: 28px; margin: 0; accent-color: var(--accent); background: transparent; }
-.actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 26px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  --fill: 50%;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(to right, var(--ink) var(--fill), var(--board-deep) var(--fill));
+}
+input[type="range"]::-moz-range-track { height: 6px; border-radius: 3px; background: var(--board-deep); }
+input[type="range"]::-moz-range-progress { height: 6px; border-radius: 3px; background: var(--ink); }
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px; height: 22px; margin-top: -8px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  transition: transform 0.12s var(--ease), border-color 0.12s;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+}
+input[type="range"]:active::-webkit-slider-thumb { transform: scale(1.18); border-color: var(--accent); }
+input[type="range"]:active::-moz-range-thumb { border-color: var(--accent); }
+
+/* A switch, not a checkbox. */
+.control input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 44px; height: 26px; margin: 9px 0;
+  border-radius: 13px;
+  background: var(--board-deep);
+  position: relative;
+  cursor: pointer;
+  transition: background 0.15s var(--ease);
+}
+.control input[type="checkbox"]::after {
+  content: "";
+  position: absolute; top: 3px; left: 3px;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--paper);
+  transition: transform 0.18s var(--ease);
+}
+.control input[type="checkbox"]:checked { background: var(--ink); }
+.control input[type="checkbox"]:checked::after { transform: translateX(18px); }
+
+.control input[type="color"] {
+  width: 44px; height: 30px; padding: 0;
+  border: 0; border-radius: 8px; background: none; cursor: pointer;
+}
+.control input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+.control input[type="color"]::-webkit-color-swatch { border: 0; border-radius: 8px; }
+.control input[type="color"]::-moz-color-swatch { border: 0; border-radius: 8px; }
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 16px;
+}
+.actions button:first-child { grid-column: 1 / -1; background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.actions button:first-child:hover { background: var(--accent); border-color: var(--accent); color: #1a1406; }
+
+/* Thumbnail capture: just the stage, full frame. */
+html.thumb .top, html.thumb .panel { display: none; }
+html.thumb .demo { grid-template-columns: 1fr; grid-template-rows: 1fr; }
+html.thumb .demo .stage { grid-column: 1; grid-row: 1; }
 
 @media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; animation: none !important; }
+  *, *::before, *::after { transition: none !important; animation: none !important; }
 }

@@ -11,6 +11,8 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : un
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="theme-color" content="#d6ddd3" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1b2e28" media="(prefers-color-scheme: dark)" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     {canonical && <link rel="canonical" href={canonical} />}
@@ -18,7 +20,12 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : un
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <script is:inline>
       // Before paint, so a stored theme never flashes the other one.
-      try { var t = localStorage.getItem("playground:theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+      // ?theme=dark|light and ?thumb are for thumbnail capture; neither is stored.
+      var q = new URLSearchParams(location.search), root = document.documentElement;
+      var forced = q.get("theme");
+      if (forced === "dark" || forced === "light") root.dataset.theme = forced;
+      else try { var t = localStorage.getItem("playground:theme"); if (t) root.dataset.theme = t; } catch (e) {}
+      if (q.has("thumb")) root.classList.add("thumb");
     </script>
   </head>
   <body>

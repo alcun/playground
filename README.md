@@ -4,8 +4,9 @@ Small interactive demos with the knobs left on. Every demo gets a control panel
 with Reset, Randomize and Copy values, and its settings live in the URL, so a
 link reproduces exactly what you were looking at.
 
-Static Astro site, no framework runtime, no database. Light and dark themes
-come from a handful of CSS tokens.
+Static Astro site, no framework runtime, no database. The index is a painted
+pegboard with the wordmark hung on a rope you can swing. Light and dark themes
+come from a handful of CSS tokens; type is Bricolage Grotesque.
 
 ## Run it
 
@@ -38,8 +39,16 @@ export const demo: Demo = {
 };
 ```
 
-Rules for demos, written for people and coding agents alike, are in
-[CLAUDE.md](CLAUDE.md).
+Then capture its index thumbnails against a running preview:
+
+```sh
+npm run build && npm run preview   # in another terminal
+npm run thumbs -- <slug>           # uses the Playwright CLI by default
+```
+
+Set `THUMB_SHOT` to use another screenshot command (`{url}` and `{out}` are
+filled in). Rules for demos, written for people and coding agents alike, are
+in [CLAUDE.md](CLAUDE.md).
 
 ## Licence
 

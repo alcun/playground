@@ -43,6 +43,15 @@ A static Astro site of small interactive demos. Each demo is one folder in
   the explanation lives in the demo's README.
 - No new dependencies without a reason a demo cannot meet without them.
 
+## Thumbnails
+
+- Every demo has `public/thumbs/<slug>-light.webp` and `-dark.webp`, captured
+  by `npm run thumbs` from `/<slug>/?thumb&theme=light|dark` against a running
+  preview. Recapture a demo's pair in the same commit as any visual change.
+  Look at them before committing; a stale thumbnail is worse than none.
+- If the default state makes a dull still, a demo may pose itself when
+  `document.documentElement.classList.contains("thumb")`. Pose only; no other behaviour.
+
 ## Before committing
 
 - `npm run build` passes (it type-checks first).

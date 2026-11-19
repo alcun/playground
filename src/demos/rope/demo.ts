@@ -253,6 +253,8 @@ export const demo: Demo = {
       wake();
     }
 
+    // Posed for its thumbnail: hanging loose rather than ruled straight.
+    if (document.documentElement.classList.contains("thumb")) p = { ...p, weightless: false, slack: 14, thickness: 6 };
     active = !p.weightless;
     applyStyle();
     ro.observe(svg);
