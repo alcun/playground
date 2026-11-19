@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 2026-11-19
 
 ### Added
 
@@ -8,11 +8,6 @@
 - Sea: a rolling sea from four summed waves, as lines or dots, with wind and camera controls.
 - Ink brush: the Sumicat sumi brush painting an enso. Paint your own strokes; every stroke repaints as the brush changes.
 - A colour control for colours that belong to the subject.
-
-## 2026-11-19
-
-### Added
-
 - A playground of interactive demos, each with a control panel: Reset,
   Randomize, Copy values, settings remembered per browser and carried in the URL.
 - Rope: a Verlet rope you can grab anywhere, swing and drop.
