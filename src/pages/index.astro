@@ -3,13 +3,45 @@ import Base from "../layouts/Base.astro";
 import { demos } from "../lib/registry";
 ---
 <Base title="Playground" description="Small interactive demos with the knobs left on.">
-  <main style="max-width: 640px; margin: 0 auto; padding: 16px;">
+  <main>
     <h1>Playground</h1>
-    <ul>
+    <ul class="cards">
       {demos.map((d) => (
-        <li><a href={`/${d.slug}/`}>{d.title}</a>: {d.description}</li>
+        <li>
+          <a href={`/${d.slug}/`}>
+            <strong>{d.title}</strong>
+            <span>{d.description}</span>
+          </a>
+        </li>
       ))}
     </ul>
     <p><a href="https://github.com/alcun/playground">Source</a></p>
   </main>
 </Base>
+
+<style>
+  main { max-width: 960px; margin: 0 auto; padding: 16px; }
+  .cards {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+  }
+  .cards a {
+    aspect-ratio: 1;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 14px;
+    border: 1px solid var(--hair);
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .cards a:hover { border-color: var(--ink-faint); }
+  .cards span { color: var(--ink-soft); font-size: 14px; }
+  @media (max-width: 500px) { .cards a { padding: 12px; } .cards span { font-size: 13px; } }
+</style>

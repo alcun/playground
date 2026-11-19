@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- The index is a grid of square cards, two across on a phone.
+
 ## 2026-11-19, plain
 
 ### Changed
