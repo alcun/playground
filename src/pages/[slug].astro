@@ -11,16 +11,18 @@ const { title, description } = Astro.props;
 ---
 <Base title={`${title} · Playground`} description={description}>
   <div class="demo" data-slug={slug}>
-    <header class="top">
-      <a class="home" href="/">playground</a>
-      <span class="slash" aria-hidden="true">/</span>
-      <h1>{title}</h1>
-      <span class="spacer"></span>
-      <button type="button" class="panel-toggle" aria-expanded="true" aria-controls="panel">Controls</button>
-      <ThemeButton />
-    </header>
     <div class="stage"></div>
-    <aside class="panel" id="panel" aria-label="Controls"></aside>
+    <nav class="crumb">
+      <a href="/">~/playground</a><span aria-hidden="true">/</span><h1>{slug}</h1>
+    </nav>
+    <section class="console" aria-label="Controls">
+      <div class="console-bar">
+        <span class="title">{slug}</span>
+        <ThemeButton />
+        <button type="button" class="console-toggle" aria-expanded="true" aria-controls="panel">_</button>
+      </div>
+      <div class="panel" id="panel"></div>
+    </section>
   </div>
 </Base>
 <script>
@@ -33,12 +35,18 @@ const { title, description } = Astro.props;
   const slug = root.dataset.slug!;
   const stage = root.querySelector<HTMLElement>(".stage")!;
   const panel = root.querySelector<HTMLElement>(".panel")!;
-  const toggle = root.querySelector<HTMLButtonElement>(".panel-toggle")!;
+  const consoleEl = root.querySelector<HTMLElement>(".console")!;
+  const toggle = root.querySelector<HTMLButtonElement>(".console-toggle")!;
 
-  toggle.addEventListener("click", () => {
-    const closed = panel.classList.toggle("closed");
-    toggle.setAttribute("aria-expanded", String(!closed));
-  });
+  // Collapsed to its title bar on a phone to start with, so the toy is seen first.
+  const show = (open: boolean) => {
+    consoleEl.classList.toggle("closed", !open);
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.textContent = open ? "_" : "+";
+    toggle.setAttribute("aria-label", open ? "Hide controls" : "Show controls");
+  };
+  show(!matchMedia("(max-width: 640px)").matches);
+  toggle.addEventListener("click", () => show(consoleEl.classList.contains("closed")));
 
   loaders[`../demos/${slug}/demo.ts`]().then(({ demo }) => {
     let instance: ReturnType<Demo["mount"]> | undefined;

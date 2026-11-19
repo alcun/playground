@@ -4,204 +4,130 @@ import Base from "../layouts/Base.astro";
 import ThemeButton from "../components/ThemeButton.astro";
 import { demos } from "../lib/registry";
 
-const word = "playground".split("");
-const hasThumb = (slug: string) => existsSync(`public/thumbs/${slug}-light.webp`) && existsSync(`public/thumbs/${slug}-dark.webp`);
+const hasThumb = (slug: string) =>
+  existsSync(`public/thumbs/${slug}-light.webp`) && existsSync(`public/thumbs/${slug}-dark.webp`);
+const width = Math.max(...demos.map((d) => d.slug.length)) + 2;
 ---
-<Base title="Playground" description="Small toys with the knobs left on. Every one has sliders; pick one up and break it.">
-  <div class="wall">
-    <header class="hero">
-      <div class="rope-wrap">
-        <svg class="rope" aria-hidden="true">
-          <path class="hit" />
-          <path class="shadow" />
-          <path class="body" />
-          <path class="twist" />
-        </svg>
-        <h1 class="word" aria-label="Playground">
-          {word.map((ch) => <span class={`tag${"bdfhklt".includes(ch) ? " asc" : ""}`} aria-hidden="true"><span class="string"></span><span class="ch">{ch}</span></span>)}
-        </h1>
-      </div>
-      <div class="under">
-        <p>Small toys with the knobs left on. Grab the rope.</p>
-        <ThemeButton />
-      </div>
+<Base title="Playground" description="Small toys with the knobs left on.">
+  <div class="term">
+    <header>
+      <span><span class="dim">~/playground $</span> ls</span>
+      <ThemeButton />
     </header>
 
-    <main>
-      <ul class="pegs">
-        {demos.map((d) => (
+    <main class="split">
+      <ul class="ls" style={`--w: ${width}ch`}>
+        {demos.map((d, i) => (
           <li>
-            <a class="toy" href={`/${d.slug}/`}>
-              <span class="peg" aria-hidden="true"></span>
-              <span class="shot">
-                {hasThumb(d.slug) ? (
-                  <>
-                    <img class="light" src={`/thumbs/${d.slug}-light.webp`} alt="" width="800" height="600" loading="lazy" decoding="async" />
-                    <img class="dark" src={`/thumbs/${d.slug}-dark.webp`} alt="" width="800" height="600" loading="lazy" decoding="async" />
-                  </>
-                ) : (
-                  <span class="none">{d.title}</span>
-                )}
-              </span>
-              <span class="name">{d.title}</span>
+            <a href={`/${d.slug}/`} data-slug={d.slug} data-thumb={hasThumb(d.slug) ? "1" : undefined} aria-current={i === 0 ? "true" : undefined}>
+              <span class="slug">{d.slug}</span>
               <span class="what">{d.description}</span>
             </a>
           </li>
         ))}
       </ul>
+
+      <figure class="preview" aria-hidden="true">
+        <img class="light" alt="" width="800" height="600" />
+        <img class="dark" alt="" width="800" height="600" />
+      </figure>
     </main>
 
-    <footer class="foot">
-      <a href="https://github.com/alcun/playground">Source on GitHub</a>
-      <span>Made by <a href="https://alcun.dev">Alasdair Cunningham</a></span>
+    <footer>
+      <span class="dim">{demos.length} toys, knobs left on.</span>
+      <span><a href="https://github.com/alcun/playground">source</a> <span class="dim">by</span> <a href="https://alcun.dev">alcun.dev</a></span>
     </footer>
   </div>
 </Base>
 
 <script>
-  import { mountHero } from "../lib/hero";
-  mountHero(document.querySelector<HTMLElement>(".rope-wrap")!);
+  // The preview pane follows whichever row is pointed at or focused.
+  const links = [...document.querySelectorAll<HTMLAnchorElement>(".ls a")];
+  const imgs = document.querySelectorAll<HTMLImageElement>(".preview img");
+  const show = (a: HTMLAnchorElement) => {
+    for (const l of links) l.removeAttribute("aria-current");
+    a.setAttribute("aria-current", "true");
+    const has = a.dataset.thumb === "1";
+    imgs.forEach((img) => {
+      img.hidden = !has;
+      if (has) img.src = `/thumbs/${a.dataset.slug}-${img.className}.webp`;
+    });
+  };
+  for (const a of links) {
+    a.addEventListener("pointerenter", () => show(a));
+    a.addEventListener("focus", () => show(a));
+  }
+  if (links[0]) show(links[0]);
 </script>
 
 <style>
-  .wall {
+  .term {
     min-height: 100svh;
-    background-color: var(--board);
-    /* Pegboard: a hole every 28px, offset so the grid reads as drilled, not printed. */
-    background-image: radial-gradient(circle at 14px 14px, var(--hole) 0 2.6px, transparent 3.2px);
-    background-size: 28px 28px;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 12px 16px;
   }
-
-  /* ---- The wordmark on its rope ---- */
-  .hero { padding: 0 0 8px; }
-  .rope-wrap {
-    position: relative;
-    height: clamp(190px, 31vw, 400px);
-    overflow: hidden;
-    touch-action: pan-y;
-  }
-  .rope { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; fill: none; }
-  .rope .hit { stroke: transparent; stroke-width: 36; pointer-events: stroke; cursor: grab; touch-action: none; }
-  :global(.rope-wrap.grabbing) .rope .hit { cursor: grabbing; }
-  .rope .shadow { stroke: color-mix(in srgb, var(--hole) 80%, transparent); stroke-width: 7; stroke-linecap: round; transform: translateY(3px); }
-  .rope .body { stroke: var(--rope); stroke-width: 4.5; stroke-linecap: round; }
-  .rope .twist { stroke: color-mix(in srgb, var(--ink) 30%, transparent); stroke-width: 2; stroke-dasharray: 1.6 5.4; }
-  @media (pointer: coarse) { .rope .hit { stroke-width: 60; } }
-
-  .word {
-    margin: 0;
-    font-weight: 800;
-    font-stretch: 75%;
-    font-size: clamp(54px, 12.5vw, 172px);
-    line-height: 1;
-    letter-spacing: -0.02em;
-    color: var(--ink);
-    pointer-events: none;
-  }
-  .tag {
-    position: absolute;
-    left: 0; top: 0;
-    /* Hung from the knot by its top centre. Hidden until the rope has laid itself out. */
-    transform-origin: 0 0;
-    visibility: hidden;
-  }
-  :global(.rope-wrap.live) .tag { visibility: visible; }
-  .tag .string {
-    position: absolute;
-    left: -0.75px; top: 0;
-    width: 1.5px; height: 0.2em;
-    background: var(--ink-soft);
-  }
-  /* The string meets the top of the glyph: lower for x-height letters, higher for ascenders. */
-  .tag .ch {
-    display: block;
-    transform: translate(-50%, -0.21em);
-  }
-  .tag.asc .ch { transform: translate(-50%, -0.02em); }
-
-  .under {
+  header, footer {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: space-between;
     gap: 16px;
-    max-width: 1240px;
-    margin: 0 auto;
-    padding: 0 20px;
+    min-height: var(--row);
   }
-  .under p {
-    margin: 0;
-    font-size: clamp(17px, 2.2vw, 21px);
-    font-weight: 450;
-    color: var(--ink-soft);
-    max-width: 44ch;
+  footer { flex-wrap: wrap; padding-top: 16px; }
+  footer a { text-underline-offset: 3px; }
+  .dim { color: var(--ink-faint); }
+
+  .split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+    align-content: start;
+    padding-top: 16px;
+  }
+  @media (min-width: 900px) {
+    .split { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); align-items: start; }
   }
 
-  /* ---- The toys, each hung on a peg ---- */
-  .pegs {
-    list-style: none;
-    margin: 0 auto;
-    padding: 36px 20px 56px;
-    max-width: 1240px;
+  .ls { list-style: none; margin: 0; padding: 0; }
+  .ls a {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 290px), 1fr));
-    gap: 44px 28px;
-  }
-  .toy {
-    position: relative;
-    display: grid;
-    gap: 4px;
-    padding: 12px 12px 16px;
+    grid-template-columns: var(--w) 1fr;
+    gap: 0 8px;
+    padding: 6px 8px;
+    margin: 0 -8px;
     text-decoration: none;
-    background: var(--paper);
-    border-radius: 16px;
-    box-shadow: 0 2px 0 var(--hole), 0 14px 24px -18px color-mix(in srgb, var(--ink) 55%, transparent);
-    transform-origin: 50% -14px;
-    transition: transform 0.35s var(--ease);
-  }
-  /* Lift it off the peg a touch: the one response to pointing at a toy. */
-  .toy:hover, .toy:focus-visible { transform: rotate(-1.2deg) translateY(-3px); }
-  .peg {
-    position: absolute;
-    left: 50%; top: -9px;
-    width: 18px; height: 18px;
-    translate: -50% 0;
-    border-radius: 50%;
-    background: var(--ink-soft);
-    box-shadow: inset 0 -3px 0 color-mix(in srgb, var(--ink) 45%, transparent), 0 2px 3px color-mix(in srgb, var(--ink) 30%, transparent);
-  }
-  .shot {
-    display: block;
-    aspect-ratio: 4 / 3;
-    border-radius: 10px;
-    overflow: hidden;
-    background: var(--board-deep);
-    margin: 14px 0 10px;
-  }
-  .shot img { display: block; width: 100%; height: 100%; object-fit: cover; }
-  .shot .dark { display: none; }
-  :global(:root[data-theme="dark"]) .shot .light { display: none; }
-  :global(:root[data-theme="dark"]) .shot .dark { display: block; }
-  @media (prefers-color-scheme: dark) {
-    :global(:root:not([data-theme="light"])) .shot .light { display: none; }
-    :global(:root:not([data-theme="light"])) .shot .dark { display: block; }
-  }
-  .shot .none {
-    display: grid; place-items: center; height: 100%;
-    font-weight: 800; font-stretch: 75%; font-size: 40px; color: var(--ink-faint);
-  }
-  .name { font-size: 22px; font-weight: 700; font-stretch: 85%; line-height: 1.15; padding: 0 4px; }
-  .what { font-size: 15px; color: var(--ink-soft); padding: 0 4px; text-wrap: pretty; }
-
-  .foot {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 8px 24px;
-    max-width: 1240px;
-    margin: 0 auto;
-    padding: 20px 20px 36px;
-    font-size: 14px;
     color: var(--ink-soft);
   }
-  .foot a { color: var(--ink); text-underline-offset: 3px; }
+  .ls .slug { color: var(--ink); white-space: pre; }
+  .ls .slug::before { content: "  "; }
+  .ls a[aria-current="true"] { background: var(--well); }
+  .ls a[aria-current="true"] .slug::before { content: "> "; color: var(--accent); }
+  .ls .what { text-wrap: pretty; }
+  @media (max-width: 560px) {
+    .ls a { grid-template-columns: 1fr; padding-block: 10px; }
+    .ls .what { padding-left: 2ch; color: var(--ink-faint); }
+  }
+
+  .preview {
+    margin: 0;
+    aspect-ratio: 4 / 3;
+    border: 1px solid var(--hair);
+    background: var(--paper);
+    position: sticky;
+    top: 16px;
+  }
+  .preview img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .preview .dark { display: none; }
+  :global(:root[data-theme="dark"]) .preview .light { display: none; }
+  :global(:root[data-theme="dark"]) .preview .dark { display: block; }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme="light"])) .preview .light { display: none; }
+    :global(:root:not([data-theme="light"])) .preview .dark { display: block; }
+  }
+  .preview img[hidden] { display: none !important; }
+  /* On a phone the list is the page; there is no pointer to follow. */
+  @media (max-width: 899px) { .preview { display: none; } }
 </style>

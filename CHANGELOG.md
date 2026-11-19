@@ -4,15 +4,15 @@
 
 ### Changed
 
-- A new look. The index is a painted pegboard with each toy hung on a peg, and
-  the word playground hangs from a rope you can grab and swing.
-- Demo pages sit on a plain bench with the controls on a faceplate beside them:
-  proper sliders, switches, and Randomize as the main button.
-- Light and dark themes are a sage board and a deep workshop green.
+- A terminal look. The index is a plain listing with a preview of whichever toy
+  you point at; each toy fills the screen with a small floating console of
+  controls that folds to one line and docks at the bottom on a phone.
+- Monospace throughout, square corners, graphite light and dark themes.
+- Shorter control names.
 
 ### Added
 
-- Thumbnails for every toy on the index, in light and dark.
+- Preview images for every toy, in light and dark.
 
 ## 2026-11-19
 

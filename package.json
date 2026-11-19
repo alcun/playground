@@ -10,7 +10,6 @@
     "thumbs": "node scripts/thumbs.mjs"
   },
   "dependencies": {
-    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
     "astro": "5.18.2"
   },
   "devDependencies": {

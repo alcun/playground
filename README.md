@@ -4,9 +4,9 @@ Small interactive demos with the knobs left on. Every demo gets a control panel
 with Reset, Randomize and Copy values, and its settings live in the URL, so a
 link reproduces exactly what you were looking at.
 
-Static Astro site, no framework runtime, no database. The index is a painted
-pegboard with the wordmark hung on a rope you can swing. Light and dark themes
-come from a handful of CSS tokens; type is Bricolage Grotesque.
+Static Astro site, no framework runtime, no database. Terminal styling:
+monospace, a listing for an index, and a small floating console of controls
+over each toy. Light and dark themes come from a handful of CSS tokens.
 
 ## Run it
 

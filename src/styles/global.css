@@ -1,254 +1,238 @@
-@import "@fontsource-variable/bricolage-grotesque/standard.css";
-
-/* A workshop wall. The index is painted pegboard with the toys hung on it;
-   a demo page is one toy taken down onto the bench.
+/* A console. The toy gets the whole screen; the controls are a small floating
+   panel, dense and monospaced, like a devtools tweak pane.
 
    Demos use these tokens and nothing else, so light and dark come free.
    Canvas demos read them with tokens() from src/lib/theme.ts.
-     --board   the painted pegboard (index, panel)
-     --paper   the bench a demo sits on
+     --paper   the ground every demo draws on
+     --panel   the console surface
      --ink     text and marks; -soft and -faint step back from it
      --hair    rules and outlines
-     --accent  safety amber: focus, active controls, glints. Use sparingly.
-     --rope    hemp */
+     --accent  focus, active controls, glints. Use sparingly.
+     --rope    the rope demo's fibre */
 :root {
   color-scheme: light;
-  --board: #d6ddd3;
-  --board-deep: #c3ccc0;
-  --hole: #a7b2a4;
-  --paper: #eef1ec;
-  --ink: #18211d;
-  --ink-soft: #46524b;
-  --ink-faint: #85918a;
-  --hair: #bfc8bc;
-  --accent: #d98c0b;
+  --paper: #f3f4f4;
+  --panel: #ffffff;
+  --well: #e6e8e9;
+  --ink: #1a1c1e;
+  --ink-soft: #55595d;
+  --ink-faint: #8d9296;
+  --hair: #d9dcde;
+  --accent: #d48a00;
   --rope: #a8683a;
-  --sans: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
-  --tap: 44px;
-  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  --row: 28px;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
-    --board: #1b2e28;
-    --board-deep: #15251f;
-    --hole: #0c1713;
-    --paper: #102019;
-    --ink: #e4ebe5;
-    --ink-soft: #a6b4ab;
-    --ink-faint: #6a7c72;
-    --hair: #2a4037;
+    --paper: #111314;
+    --panel: #181a1c;
+    --well: #26292c;
+    --ink: #dadddf;
+    --ink-soft: #9ba1a5;
+    --ink-faint: #61676b;
+    --hair: #2c3033;
     --accent: #f2b232;
     --rope: #c98f5c;
   }
 }
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --board: #1b2e28;
-  --board-deep: #15251f;
-  --hole: #0c1713;
-  --paper: #102019;
-  --ink: #e4ebe5;
-  --ink-soft: #a6b4ab;
-  --ink-faint: #6a7c72;
-  --hair: #2a4037;
+  --paper: #111314;
+  --panel: #181a1c;
+  --well: #26292c;
+  --ink: #dadddf;
+  --ink-soft: #9ba1a5;
+  --ink-faint: #61676b;
+  --hair: #2c3033;
   --accent: #f2b232;
   --rope: #c98f5c;
 }
+@media (pointer: coarse) { :root { --row: 40px; } }
 
 *, *::before, *::after { box-sizing: border-box; }
 html, body { margin: 0; }
 body {
   background: var(--paper);
   color: var(--ink);
-  font: 400 16px/1.5 var(--sans);
-  font-variant-numeric: tabular-nums;
+  font: 400 13px/1.5 var(--mono);
   -webkit-font-smoothing: antialiased;
 }
 a { color: inherit; }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+:focus-visible { outline: 1.5px solid var(--accent); outline-offset: 2px; }
 
 button {
-  font: 500 15px/1 var(--sans);
-  color: var(--ink);
-  background: transparent;
-  border: 1.5px solid var(--ink);
-  border-radius: 10px;
-  min-height: var(--tap);
-  padding: 0 16px;
-  cursor: pointer;
-  transition: background 0.15s var(--ease), color 0.15s var(--ease);
-}
-button:hover { background: var(--ink); color: var(--paper); }
-button:active { transform: translateY(1px); }
-
-/* The theme switch: a little sun that is half eclipsed. */
-.theme {
-  width: var(--tap);
-  padding: 0;
-  border: 0;
-  display: grid;
-  place-items: center;
+  font: inherit;
   color: var(--ink-soft);
+  background: none;
+  border: 0;
+  padding: 0 8px;
+  min-height: var(--row);
+  cursor: pointer;
 }
-.theme:hover { background: none; color: var(--ink); }
+button:hover { color: var(--ink); }
+/* Text buttons in brackets, the way a terminal UI marks something pressable. */
+button.cmd::before { content: "["; color: var(--ink-faint); }
+button.cmd::after { content: "]"; color: var(--ink-faint); }
+.theme { color: var(--ink-faint); }
 
-/* ---- Demo page: the toy on the bench, its faceplate beside it ---- */
+/* ---- Demo page ---- */
 
-.demo {
-  height: 100svh;
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
-  background: var(--paper);
-}
-.top {
+.demo { position: fixed; inset: 0; background: var(--paper); }
+.stage { position: absolute; inset: 0; overflow: hidden; }
+
+.crumb {
+  position: absolute;
+  top: 10px; left: 12px;
+  z-index: 2;
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 6px 8px 6px 16px;
+  gap: 2px;
+  color: var(--ink-faint);
 }
-.top .home {
-  font-weight: 700;
-  font-stretch: 75%;
-  font-size: 17px;
-  text-decoration: none;
+.crumb a { text-decoration: none; padding: 4px 2px; }
+.crumb a:hover { color: var(--ink); }
+.crumb h1 { margin: 0; font: inherit; color: var(--ink-soft); }
+
+.console {
+  position: absolute;
+  z-index: 3;
+  top: 10px; right: 10px;
+  width: 320px;
+  max-height: calc(100% - 20px);
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  border: 1px solid var(--hair);
+  overflow: hidden;
+}
+.console-bar {
+  display: flex;
+  align-items: center;
+  min-height: var(--row);
+  padding-left: 10px;
+  border-bottom: 1px solid var(--hair);
+  color: var(--ink-faint);
+}
+.console-bar .title { flex: 1; }
+.console-bar button { padding: 0 10px; }
+.console.closed .console-bar { border-bottom: 0; }
+.console.closed .panel { display: none; }
+.panel { overflow-y: auto; overscroll-behavior: contain; padding: 6px 10px 8px; }
+
+@media (max-width: 640px) {
+  .console {
+    top: auto; bottom: 0; left: 0; right: 0;
+    width: auto;
+    max-height: 48svh;
+    border-width: 1px 0 0;
+  }
+}
+
+/* Rows: label on the left, control on the right. */
+.controls { display: grid; }
+.control {
+  display: grid;
+  grid-template-columns: 38% 1fr;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--row);
+}
+.control label {
   color: var(--ink-soft);
-  padding: 10px 0;
+  text-transform: lowercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.top .home:hover { color: var(--ink); }
-.top .slash { color: var(--ink-faint); padding: 0 6px; }
-.top h1 { margin: 0; font-size: 17px; font-weight: 500; }
-.top .spacer { flex: 1; }
-.panel-toggle { min-height: 36px; font-size: 14px; }
-
-.stage { position: relative; overflow: hidden; min-height: 0; }
-
-.panel {
-  background: var(--board);
-  max-height: 44svh;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  padding: 14px 16px 20px;
-  border-radius: 18px 18px 0 0;
-}
-.panel-toggle { display: none; }
-@media (max-width: 799px) {
-  .panel-toggle { display: inline-flex; align-items: center; }
-  .panel.closed { padding-block: 0; }
-  .panel.closed > * { display: none; }
-}
-@media (min-width: 800px) {
-  .demo {
-    grid-template-columns: minmax(0, 1fr) 320px;
-    grid-template-rows: auto minmax(0, 1fr);
-  }
-  .demo .top { grid-column: 1; }
-  .demo .stage { grid-column: 1; grid-row: 2; }
-  .panel {
-    grid-column: 2;
-    grid-row: 1 / -1;
-    max-height: none;
-    border-radius: 0;
-    padding: 20px 22px 28px;
-  }
-}
-
-/* Controls. A slider is a groove with a knob in it; the readout sits on the label line. */
-.controls { display: grid; gap: 2px; }
-.control { min-height: var(--tap); display: grid; align-content: center; }
-.control .head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
-.control label { font-size: 14px; color: var(--ink-soft); }
-.control output { font-size: 14px; font-weight: 600; color: var(--ink); }
-.control.toggle, .control.colour { grid-template-columns: 1fr auto; align-items: center; }
-.control.text { gap: 6px; padding-block: 4px; }
+.control .head { display: contents; }
+.control.range { grid-template-columns: 38% 1fr 5.5ch; }
+.control.range input { grid-column: 2; grid-row: 1; }
+.control.range output { grid-column: 3; grid-row: 1; text-align: right; color: var(--ink); }
+.control.text { grid-template-columns: 38% 1fr; }
 
 .control input[type="text"] {
-  font: 15px/1.4 var(--sans);
+  font: inherit;
   color: var(--ink);
-  background: var(--paper);
+  background: var(--well);
   border: 0;
-  border-radius: 10px;
-  min-height: var(--tap);
-  padding: 0 12px;
+  border-radius: 0;
+  height: calc(var(--row) - 6px);
+  padding: 0 6px;
   width: 100%;
+  min-width: 0;
 }
 
 input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
-  height: 26px;
+  min-width: 0;
+  height: var(--row);
   margin: 0;
   background: transparent;
-  cursor: pointer;
+  cursor: ew-resize;
   --fill: 50%;
 }
 input[type="range"]::-webkit-slider-runnable-track {
-  height: 6px;
-  border-radius: 3px;
-  background: linear-gradient(to right, var(--ink) var(--fill), var(--board-deep) var(--fill));
+  height: 3px;
+  border-radius: 0;
+  background: linear-gradient(to right, var(--ink-soft) var(--fill), var(--well) var(--fill));
 }
-input[type="range"]::-moz-range-track { height: 6px; border-radius: 3px; background: var(--board-deep); }
-input[type="range"]::-moz-range-progress { height: 6px; border-radius: 3px; background: var(--ink); }
+input[type="range"]::-moz-range-track { height: 3px; border-radius: 0; background: var(--well); }
+input[type="range"]::-moz-range-progress { height: 3px; border-radius: 0; background: var(--ink-soft); }
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 22px; height: 22px; margin-top: -8px;
-  border-radius: 50%;
-  background: var(--paper);
-  border: 2px solid var(--ink);
-  transition: transform 0.12s var(--ease), border-color 0.12s;
+  width: 6px; height: 13px; margin-top: -5px;
+  border-radius: 0;
+  background: var(--ink);
+  border: 0;
 }
-input[type="range"]::-moz-range-thumb {
-  width: 18px; height: 18px;
-  border-radius: 50%;
-  background: var(--paper);
-  border: 2px solid var(--ink);
+input[type="range"]::-moz-range-thumb { width: 6px; height: 13px; border-radius: 0; background: var(--ink); border: 0; }
+input[type="range"]:active::-webkit-slider-thumb { background: var(--accent); }
+input[type="range"]:active::-moz-range-thumb { background: var(--accent); }
+@media (pointer: coarse) {
+  input[type="range"]::-webkit-slider-thumb { width: 10px; height: 22px; margin-top: -9.5px; }
+  input[type="range"]::-moz-range-thumb { width: 10px; height: 22px; }
 }
-input[type="range"]:active::-webkit-slider-thumb { transform: scale(1.18); border-color: var(--accent); }
-input[type="range"]:active::-moz-range-thumb { border-color: var(--accent); }
 
-/* A switch, not a checkbox. */
+/* A toggle reads as [x] or [ ]. */
 .control input[type="checkbox"] {
   appearance: none;
   -webkit-appearance: none;
-  width: 44px; height: 26px; margin: 9px 0;
-  border-radius: 13px;
-  background: var(--board-deep);
-  position: relative;
+  justify-self: start;
+  margin: 0;
+  width: auto; height: var(--row);
+  background: none;
   cursor: pointer;
-  transition: background 0.15s var(--ease);
+  font: inherit;
+  color: var(--ink-faint);
 }
-.control input[type="checkbox"]::after {
-  content: "";
-  position: absolute; top: 3px; left: 3px;
-  width: 20px; height: 20px; border-radius: 50%;
-  background: var(--paper);
-  transition: transform 0.18s var(--ease);
-}
-.control input[type="checkbox"]:checked { background: var(--ink); }
-.control input[type="checkbox"]:checked::after { transform: translateX(18px); }
+.control input[type="checkbox"]::after { content: "[ ]"; line-height: var(--row); }
+.control input[type="checkbox"]:checked { color: var(--ink); }
+.control input[type="checkbox"]:checked::after { content: "[x]"; }
 
 .control input[type="color"] {
-  width: 44px; height: 30px; padding: 0;
-  border: 0; border-radius: 8px; background: none; cursor: pointer;
+  justify-self: start;
+  width: 40px; height: 16px; padding: 0;
+  border: 1px solid var(--hair); border-radius: 0; background: none; cursor: pointer;
 }
 .control input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
-.control input[type="color"]::-webkit-color-swatch { border: 0; border-radius: 8px; }
-.control input[type="color"]::-moz-color-swatch { border: 0; border-radius: 8px; }
+.control input[type="color"]::-webkit-color-swatch { border: 0; border-radius: 0; }
+.control input[type="color"]::-moz-color-swatch { border: 0; border-radius: 0; }
 
 .actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-top: 16px;
+  display: flex;
+  margin: 6px -8px 0;
+  padding-top: 4px;
+  border-top: 1px solid var(--hair);
 }
-.actions button:first-child { grid-column: 1 / -1; background: var(--ink); color: var(--paper); border-color: var(--ink); }
-.actions button:first-child:hover { background: var(--accent); border-color: var(--accent); color: #1a1406; }
+.actions button:first-child { color: var(--ink); }
+.actions button:last-child { margin-left: auto; }
 
-/* Thumbnail capture: just the stage, full frame. */
-html.thumb .top, html.thumb .panel { display: none; }
-html.thumb .demo { grid-template-columns: 1fr; grid-template-rows: 1fr; }
-html.thumb .demo .stage { grid-column: 1; grid-row: 1; }
+/* Thumbnail capture: just the stage. */
+html.thumb .crumb, html.thumb .console { display: none; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; }

@@ -59,13 +59,13 @@ export function createPanel(
   const actions = document.createElement("div");
   actions.className = "actions";
   actions.append(
-    button("Randomize", () => set(randomize(controls, params))),
-    button("Reset", () => { set({ ...defaults }); hooks.reset?.(); }),
-    button("Copy values", (b) => {
+    button("randomize", () => set(randomize(controls, params))),
+    button("reset", () => { set({ ...defaults }); hooks.reset?.(); }),
+    button("copy", (b) => {
       const text = JSON.stringify(params, null, 2);
       navigator.clipboard?.writeText(text).then(
-        () => flash(b, "Copied"),
-        () => flash(b, "Copy failed"),
+        () => flash(b, "copied"),
+        () => flash(b, "copy failed"),
       );
     }),
   );
@@ -174,7 +174,7 @@ function fromHash(): Record<string, unknown> {
 }
 
 function button(text: string, onClick: (b: HTMLButtonElement) => void) {
-  const b = Object.assign(document.createElement("button"), { type: "button", textContent: text });
+  const b = Object.assign(document.createElement("button"), { type: "button", textContent: text, className: "cmd" });
   b.addEventListener("click", () => onClick(b));
   return b;
 }

@@ -23,7 +23,8 @@ A static Astro site of small interactive demos. Each demo is one folder in
   stray input. The panel provides Reset, Randomize, Copy values, per-browser
   memory and the URL hash for free.
 - Ranges should be wide enough to break things a little. That is the fun.
-- Name controls for what you see ("Swell height"), not the variable.
+- Name controls for what you see ("Height", "Wind"), not the variable, in one or two
+  short words: the console column is narrow and labels truncate.
 - Randomize leaves text controls alone.
 
 ## Look and behaviour

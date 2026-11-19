@@ -11,13 +11,13 @@ export const demo: Demo = {
   description: "A Verlet rope. Grab any point and swing it; drop an end and it stays put.",
   updated: "2026-11-19",
   controls: [
-    { type: "range", key: "segment", label: "Segment length", min: 8, max: 80, step: 1, value: 34, unit: "px" },
+    { type: "range", key: "segment", label: "Segment", min: 8, max: 80, step: 1, value: 34, unit: "px" },
     { type: "range", key: "gravity", label: "Gravity", min: 0, max: 3000, step: 10, value: 900 },
-    { type: "range", key: "damping", label: "Velocity kept per step", min: 0.9, max: 1, step: 0.001, value: 0.99 },
-    { type: "range", key: "iterations", label: "Stiffness passes", min: 1, max: 200, step: 1, value: 120 },
+    { type: "range", key: "damping", label: "Damping", min: 0.9, max: 1, step: 0.001, value: 0.99 },
+    { type: "range", key: "iterations", label: "Stiffness", min: 1, max: 200, step: 1, value: 120 },
     { type: "range", key: "slack", label: "Slack", min: -5, max: 40, step: 0.5, value: -2, unit: "%" },
     { type: "range", key: "thickness", label: "Thickness", min: 1, max: 12, step: 0.2, value: 3.4, unit: "px" },
-    { type: "toggle", key: "weightless", label: "Weightless until touched", value: true },
+    { type: "toggle", key: "weightless", label: "Weightless", value: true },
   ],
   mount(stage, initial) {
     let p: Params = initial;

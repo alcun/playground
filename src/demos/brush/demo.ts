@@ -38,10 +38,10 @@ export const demo: Demo = {
   controls: [
     { type: "range", key: "wetness", label: "Wetness", min: 0, max: 1, step: 0.01, value: 0.5 },
     { type: "range", key: "dryness", label: "Dry brush", min: 0, max: 1, step: 0.01, value: 0.55 },
-    { type: "range", key: "tooth", label: "Paper tooth", min: 0, max: 1, step: 0.01, value: 0.5 },
+    { type: "range", key: "tooth", label: "Tooth", min: 0, max: 1, step: 0.01, value: 0.5 },
     { type: "range", key: "grain", label: "Jitter", min: 0, max: 1, step: 0.01, value: 0.25 },
     { type: "range", key: "seed", label: "Seed", min: 0, max: 50, step: 1, value: 3 },
-    { type: "range", key: "size", label: "Brush size", min: 0.1, max: 3, step: 0.05, value: 1.1 },
+    { type: "range", key: "size", label: "Size", min: 0.1, max: 3, step: 0.05, value: 1.1 },
     { type: "range", key: "speed", label: "Enso speed", min: 0.1, max: 4, step: 0.05, value: 1 },
     { type: "range", key: "gap", label: "Enso gap", min: 0, max: 0.4, step: 0.01, value: 0.07 },
     { type: "colour", key: "ink", label: "Ink", value: "#181511" },

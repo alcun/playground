@@ -32,17 +32,17 @@ export const demo: Demo = {
   updated: "2026-11-19",
   controls: [
     { type: "range", key: "cell", label: "Cell size", min: 8, max: 32, step: 1, value: 16, unit: "px" },
-    { type: "range", key: "amplitude", label: "Swell height", min: 0, max: 200, step: 1, value: 76, unit: "px" },
-    { type: "range", key: "frequency", label: "Swell frequency", min: 0.001, max: 0.02, step: 0.0005, value: 0.006 },
+    { type: "range", key: "amplitude", label: "Height", min: 0, max: 200, step: 1, value: 76, unit: "px" },
+    { type: "range", key: "frequency", label: "Frequency", min: 0.001, max: 0.02, step: 0.0005, value: 0.006 },
     { type: "range", key: "ripple", label: "Ripple", min: 0, max: 80, step: 1, value: 25, unit: "px" },
     { type: "range", key: "thickness", label: "Thickness", min: 20, max: 240, step: 1, value: 92, unit: "px" },
     { type: "range", key: "gap", label: "Centre gap", min: 0, max: 0.45, step: 0.01, value: 0.23 },
     { type: "range", key: "speed", label: "Speed", min: 0, max: 4, step: 0.05, value: 1 },
     { type: "range", key: "fps", label: "Frame rate", min: 5, max: 60, step: 1, value: 20 },
-    { type: "toggle", key: "letters", label: "Letters on the right", value: true },
-    { type: "text", key: "symbols", label: "Symbols, light to dense", value: ".:o*%#@" },
+    { type: "toggle", key: "letters", label: "Letters", value: true },
+    { type: "text", key: "symbols", label: "Symbols", value: ".:o*%#@" },
     { type: "text", key: "text", label: "Text", value: TEXT },
-    { type: "text", key: "glint", label: "Glint words", value: "coral pearls rich strange bell" },
+    { type: "text", key: "glint", label: "Glint", value: "coral pearls rich strange bell" },
   ],
   mount(stage, initial) {
     let p: Params = initial;
