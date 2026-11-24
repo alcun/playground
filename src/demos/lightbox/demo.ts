@@ -48,7 +48,7 @@ export const demo: Demo = {
   updated: "2026-11-24",
   controls: [
     { type: "range", key: "delay", label: "Network", min: 0, max: 4000, step: 50, value: 900, unit: "ms" },
-    { type: "range", key: "thumb", label: "Thumb size", min: 4, max: 240, step: 1, value: 32, unit: "px" },
+    { type: "range", key: "thumb", label: "Thumb size", min: 4, max: 600, step: 1, value: 280, unit: "px" },
     { type: "range", key: "blur", label: "Blur", min: 0, max: 60, step: 1, value: 16, unit: "px" },
     { type: "range", key: "sharpen", label: "Sharpen", min: 0, max: 3000, step: 10, value: 550, unit: "ms" },
     { type: "range", key: "from", label: "Open from", min: 0.3, max: 1.2, step: 0.01, value: 0.9 },
