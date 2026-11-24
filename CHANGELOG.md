@@ -21,6 +21,8 @@
   you leave.
 - Seal: carve a hanko with a blade, straight cuts and clean corners, stamped in vermilion.
   From the Ensō app's carver.
+- Pull: a face on a cord. Pull it and let go, or tap it to flip; tension, friction and mass
+  are sliders.
 
 ## 2026-11-19, shadcn
 
