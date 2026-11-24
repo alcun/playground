@@ -13,7 +13,7 @@ export const demo: Demo = {
   controls: [
     { type: "text", key: "number", label: "Number", value: "2.4" },
     { type: "text", key: "unit", label: "Unit", value: "m" },
-    { type: "range", key: "level", label: "Level", min: 0, max: 1, step: 0.01, value: 0.5 },
+    { type: "range", key: "level", label: "Level", min: 0, max: 1, step: 0.01, value: 0.7 },
     { type: "range", key: "bend", label: "Bend", min: 0, max: 200, step: 1, value: 62 },
     { type: "range", key: "bezel", label: "Edge depth", min: 10, max: 400, step: 5, value: 110, unit: "px" },
     { type: "range", key: "spread", label: "Rainbow", min: 0, max: 2, step: 0.01, value: 0.46 },
