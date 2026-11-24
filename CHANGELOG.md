@@ -19,6 +19,8 @@
   phase or use tonight's, and run it as a timelapse.
 - Eyes: a crowd of googly eyes that follow your pointer, blink, and look around when
   you leave.
+- Seal: carve a hanko with a blade, straight cuts and clean corners, stamped in vermilion.
+  From the Ensō app's carver.
 
 ## 2026-11-19, shadcn
 
