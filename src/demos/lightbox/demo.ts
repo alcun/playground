@@ -36,7 +36,7 @@ function paint(pic: (typeof PICS)[number], w: number, h: number): HTMLCanvasElem
     const y0 = h * (0.45 + i * 0.16), a = h * (0.05 + r() * 0.08), k = 1 + r() * 2.5, ph = r() * 7;
     x.fillStyle = col;
     x.beginPath(); x.moveTo(0, h);
-    for (let px = 0; px <= w; px += w / 120) x.lineTo(px, y0 + Math.sin((px / w) * Math.PI * k + ph) * a + Math.sin((px / w) * 23 + ph) * a * 0.12);
+    for (let px = 0; px <= w + w / 120; px += w / 120) x.lineTo(px, y0 + Math.sin((px / w) * Math.PI * k + ph) * a + Math.sin((px / w) * 23 + ph) * a * 0.12);
     x.lineTo(w, h); x.fill();
   });
   return c;
