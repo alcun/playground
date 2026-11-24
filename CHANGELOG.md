@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Water: the refracting water from Tide, with the shader's constants as sliders. Tap to splash, drag to tip it.
+- Theme: the alcun.dev theme panel, with pixel mode chips and a day scrub that repaints a small page.
+
 ## 24 November 2026
 
 ### Changed
