@@ -15,6 +15,8 @@
   arrives, with a slider for how slow the network is.
 - Pixel sky: the alcun.dev pixel sky. Scrub the hour from dawn to night, set the moon's
   phase or use tonight's, and run it as a timelapse.
+- Eyes: a crowd of googly eyes that follow your pointer, blink, and look around when
+  you leave.
 
 ## 2026-11-19, shadcn
 
