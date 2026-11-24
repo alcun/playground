@@ -4,6 +4,7 @@
 
 ### Added
 
+- Jelly letters: Dally's glassy letters you can grab and pull, with the springs, glass and puff as sliders.
 - Water: the refracting water from Tide, with the shader's constants as sliders. Tap to splash, drag to tip it.
 - Theme: the alcun.dev theme panel, with pixel mode chips and a day scrub that repaints a small page.
 

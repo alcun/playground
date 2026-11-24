@@ -4,7 +4,7 @@ import type { Demo } from "./types";
 const modules = import.meta.glob<{ demo: Demo }>("../demos/*/demo.ts", { eager: true });
 
 // The index order, most impressive first. A demo not listed here goes after these, newest first.
-const ORDER = ["orb", "water", "paper", "brush", "sea", "pixel-sky", "seal", "dot-matrix", "lawn", "rope", "pull", "text-wave", "vines", "lightbox", "confetti", "theme", "eyes"];
+const ORDER = ["jelly", "orb", "water", "paper", "brush", "sea", "pixel-sky", "seal", "dot-matrix", "lawn", "rope", "pull", "text-wave", "vines", "lightbox", "confetti", "theme", "eyes"];
 const rank = (slug: string) => (ORDER.includes(slug) ? ORDER.indexOf(slug) : ORDER.length);
 
 export const demos = Object.entries(modules)
