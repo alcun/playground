@@ -12,6 +12,8 @@ fragment: is this pixel under the surface?
          different lengths (rainbow), tint by depth, add a light beam and a teal rim
 ```
 
+- Level is measured in number heights, not stage height (Tide's was a share of the screen), so
+  the waterline sits in the same place on the number at phone width and on a desktop.
 - Tap splashes where you tap; drag sideways tips the tank and it sloshes back.
 - Shader and springs are copied from Tide (`monostudio/tide`), which adapted them from
   Eugene Yarovoi's Water (MIT, `LICENSE` here). The fixed constants are uniforms so they can be

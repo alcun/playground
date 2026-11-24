@@ -114,7 +114,7 @@ export const demo: Demo = {
     function render(reduced: boolean) {
       if (!gl) return;
       if (textDirty) uploadText();
-      const base = H * (0.63 - level * 0.3), sl = Number(p.slosh);
+      const size = Math.min(112, W * 0.265), base = H * 0.49 - size * (level - 0.5) * 3.4, sl = Number(p.slosh); // level is measured in number heights, so it reads the same on any stage
       for (let i = 0; i < N; i++) {
         const x = (i / (N - 1)) * W;
         const y = base + tilt * sl * (x - W / 2) + ys[i] + (reduced ? 0 : Math.sin(x * 0.016 + time * 1.1) * 1.8 + Math.sin(x * 0.007 - time * 0.6) * 1.2);
