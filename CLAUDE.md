@@ -21,7 +21,8 @@ framework-free: plain DOM, SVG or canvas. Add shadcn components with
 - `mount` returns `update(params)` (called with the full set on any change),
   `destroy()`, and optionally `reset()` (called by the panel's Reset after the
   values are restored), for scenes with state of their own.
-- Bump `updated` on a meaningful change; the index sorts on it.
+- Bump `updated` on a meaningful change. The index order is the `ORDER` list in
+  `src/lib/registry.ts`, most impressive first; place a new demo there.
 
 ## Controls
 

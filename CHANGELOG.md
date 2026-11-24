@@ -6,6 +6,7 @@
 
 - The index is a wall of the toys themselves, running live in square tiles with
   their names, instead of cards of text. Each toy only runs while it is on screen.
+- The index is ordered by how impressive each toy is, rather than by date.
 
 ### Added
 

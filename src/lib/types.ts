@@ -27,7 +27,7 @@ export interface Instance {
 export interface Demo {
   title: string;
   description: string;
-  /** YYYY-MM-DD of the last meaningful change; the index sorts on it. */
+  /** YYYY-MM-DD of the last meaningful change; orders demos not placed in ORDER in registry.ts. */
   updated: string;
   controls: Control[];
   /** Runs in the browser only. Never touch the DOM at module top level. */
