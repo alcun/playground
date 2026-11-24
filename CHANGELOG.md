@@ -13,6 +13,8 @@
 - Vines: seeded vines growing in from the corners, with a leaf opening at every turn.
 - Lightbox: tap a picture and watch it open blurred and sharpen when the full one
   arrives, with a slider for how slow the network is.
+- Pixel sky: the alcun.dev pixel sky. Scrub the hour from dawn to night, set the moon's
+  phase or use tonight's, and run it as a timelapse.
 
 ## 2026-11-19, shadcn
 
