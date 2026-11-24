@@ -18,6 +18,8 @@ export const demo: Demo = {
     { type: "range", key: "blink", label: "Blinks a minute", min: 0, max: 60, step: 1, value: 12 },
     { type: "range", key: "jitter", label: "Scatter", min: 0, max: 1, step: 0.01, value: 0.35 },
     { type: "toggle", key: "pair", label: "In pairs", value: true },
+    { type: "colour", key: "white", label: "Whites", value: "#fffdf7" },
+    { type: "colour", key: "iris", label: "Pupils", value: "#141414" },
   ],
   mount(stage, initial) {
     let p: Params = initial;
@@ -48,15 +50,15 @@ export const demo: Demo = {
         const { x: ux, y: uy } = faces[pair ? Math.floor(i / 2) : i];
         const cx = pair ? ux + (i % 2 ? 0.58 : -0.58) * s : ux;
         const el = document.createElement("div");
-        Object.assign(el.style, { position: "absolute", left: `${cx - s / 2}px`, top: `${uy - s / 2}px`, width: `${s}px`, height: `${s}px`, borderRadius: "50%", background: "var(--paper)", border: `${Math.max(1.5, s * 0.04)}px solid var(--ink)`, overflow: "hidden", boxSizing: "border-box" });
+        Object.assign(el.style, { position: "absolute", left: `${cx - s / 2}px`, top: `${uy - s / 2}px`, width: `${s}px`, height: `${s}px`, borderRadius: "50%", background: String(p.white), border: `${Math.max(1.5, s * 0.04)}px solid var(--ink)`, overflow: "hidden", boxSizing: "border-box" });
         const pupil = document.createElement("div");
         const ps = s * Number(p.pupil);
-        Object.assign(pupil.style, { position: "absolute", left: "50%", top: "50%", width: `${ps}px`, height: `${ps}px`, margin: `${-ps / 2}px 0 0 ${-ps / 2}px`, borderRadius: "50%", background: "var(--ink)" });
+        Object.assign(pupil.style, { position: "absolute", left: "50%", top: "50%", width: `${ps}px`, height: `${ps}px`, margin: `${-ps / 2}px 0 0 ${-ps / 2}px`, borderRadius: "50%", background: String(p.iris) });
         const glint = document.createElement("div");
-        Object.assign(glint.style, { position: "absolute", left: "22%", top: "20%", width: "26%", height: "26%", borderRadius: "50%", background: "var(--paper)", opacity: "0.85" });
+        Object.assign(glint.style, { position: "absolute", left: "22%", top: "20%", width: "26%", height: "26%", borderRadius: "50%", background: String(p.white), opacity: "0.85" });
         pupil.append(glint);
         const lid = document.createElement("div");
-        Object.assign(lid.style, { position: "absolute", inset: "0", background: "var(--ink)", transformOrigin: "50% 0", transform: "scaleY(0)" });
+        Object.assign(lid.style, { position: "absolute", inset: "0", background: String(p.iris), transformOrigin: "50% 0", transform: "scaleY(0)" });
         el.append(pupil, lid);
         root.append(el);
         eyes.push({ el, pupil, lid, cx, cy: uy, px: 0, py: 0, vx: 0, vy: 0, nextBlink: r() * 6, blinkT: -1 });
@@ -114,7 +116,7 @@ export const demo: Demo = {
 
     return {
       update(next) {
-        const rebuild = ["count", "size", "pupil", "jitter", "pair"].some((k) => next[k] !== p[k]);
+        const rebuild = ["count", "size", "pupil", "jitter", "pair", "white", "iris"].some((k) => next[k] !== p[k]);
         p = reducedMotion() ? { ...next, lag: 0, blink: 0 } : next;
         if (rebuild) build();
       },

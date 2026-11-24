@@ -10,6 +10,7 @@ pointer (or, with nobody pointing, a new spot every 1 to 4 s)
 blink: random interval from Blinks a minute; the second eye of a pair copies the first
 ```
 
-- Colours are the theme's paper and ink, so it flips with dark mode.
+- Whites and pupils are colour controls, not theme colours: eyes are white in any light, and on
+  the theme's paper and ink they turned inside out in dark mode. Only the outline follows the theme.
 - Reduced motion: no spring, no blinking, no wandering. The pupils still follow the pointer,
   because that is the interaction.
