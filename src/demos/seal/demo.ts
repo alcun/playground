@@ -73,6 +73,7 @@ export const demo: Demo = {
     { type: "range", key: "wear", label: "Wear", min: 0, max: 1, step: 0.01, value: 0.25 },
     { type: "range", key: "tilt", label: "Tilt", min: -20, max: 20, step: 0.5, value: -3, unit: "°" },
     { type: "colour", key: "ink", label: "Ink", value: "#c04830" },
+    { type: "colour", key: "paper", label: "Paper", value: "#f4efe3" },
   ],
   mount(stage, initial) {
     let p: Params = initial;
@@ -103,7 +104,7 @@ export const demo: Demo = {
       dpr = Math.min(2, devicePixelRatio || 1);
       W = r.width; H = r.height;
       canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
-      side = Math.min(W, H) * 0.66;
+      side = Math.min(W, H) * 0.6;
       const px = Math.round(side * dpr);
       seal.width = seal.height = px;
       grain = makeGrain(px);
@@ -158,11 +159,14 @@ export const demo: Demo = {
       ctx.clearRect(0, 0, W, H);
       ctx.save();
       ctx.translate(W / 2, H / 2);
+      // A seal is pressed onto a sheet, so it gets one: square to the page, the stamp tilted on it.
+      // Cut strokes then print as paper whatever the theme, which is the point of hakubun.
+      const ps = side * 1.28;
+      ctx.shadowColor = "rgba(0,0,0,.18)"; ctx.shadowBlur = 24; ctx.shadowOffsetY = 6;
+      ctx.fillStyle = String(p.paper);
+      ctx.fillRect(-ps / 2, -ps / 2, ps, ps);
+      ctx.shadowColor = "transparent";
       ctx.rotate((Number(p.tilt) * Math.PI) / 180);
-      // The carving guide: a faint outline of the block, so you know where the blade lands.
-      ctx.strokeStyle = getComputedStyle(stage).getPropertyValue("--hair").trim() || "#ccc";
-      ctx.lineWidth = 1;
-      ctx.strokeRect(-side / 2, -side / 2, side, side);
       ctx.drawImage(seal, -side / 2, -side / 2, side, side);
       ctx.restore();
     }
