@@ -57,6 +57,9 @@ framework-free: plain DOM, SVG or canvas. Add shadcn components with
 
 - `npm run build` passes (it type-checks first).
 - Look at it: light and dark, desktop and about 390px wide. Use shadcn's defaults
-  as they are; a design pass comes later, so do not restyle.
+  as they are on the toy pages.
+- The index runs every demo live in a square tile, with pointer events off,
+  mounted while on screen and destroyed when it scrolls away (`src/lib/live.ts`).
+  A demo's default values are its index tile, so they should look good at rest.
 - Update `CHANGELOG.md`: newest first, Added/Changed/Fixed/Removed as needed,
   sentence case, no emoji or em dashes.

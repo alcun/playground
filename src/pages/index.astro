@@ -1,27 +1,23 @@
 ---
 import Base from "../layouts/Base.astro";
-import { Card, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { demos } from "../lib/registry";
 ---
 <Base title="Playground" description="Small interactive demos with the knobs left on.">
-  <main class="mx-auto max-w-5xl p-4 md:p-8">
-    <h1 class="mb-6 text-2xl font-semibold">Playground</h1>
-    <ul class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+  <main>
+    <header class="flex items-baseline justify-between p-4 md:px-6">
+      <h1 class="text-sm font-medium">Playground</h1>
+      <a href="https://github.com/alcun/playground" class="text-sm text-muted-foreground hover:text-foreground">Source</a>
+    </header>
+    <ul class="grid grid-cols-1 border-t sm:grid-cols-2 lg:grid-cols-3">
       {demos.map((d) => (
-        <li>
-          <a href={`/${d.slug}/`} class="block aspect-square rounded-xl focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-hidden">
-            <Card className="h-full overflow-hidden transition-colors hover:bg-muted/50">
-              <CardHeader>
-                <CardTitle>{d.title}</CardTitle>
-                <CardDescription>{d.description}</CardDescription>
-              </CardHeader>
-            </Card>
+        <li class="border-b sm:border-r">
+          <a href={`/${d.slug}/`} class="group relative block aspect-square focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring">
+            <div data-live={d.slug} class="stage pointer-events-none absolute inset-0 overflow-hidden"></div>
+            <span class="absolute bottom-3 left-4 text-sm font-medium">{d.title}</span>
           </a>
         </li>
       ))}
     </ul>
-    <p class="mt-6 text-sm text-muted-foreground">
-      <a href="https://github.com/alcun/playground" class="underline underline-offset-4 hover:text-foreground">Source</a>
-    </p>
   </main>
+  <script>import { watch } from "../lib/live"; watch();</script>
 </Base>
