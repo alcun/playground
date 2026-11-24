@@ -9,4 +9,7 @@ growth g: stem dash offset 1-g; a leaf opens once g passes its x along the vine
 ```
 
 - One vine per corner, mirrored so each grows inward with its leaves hanging into the page.
-- Keep growing loops 0 to 1, holds, and recedes. Moving Growth by hand stops the loop there.
+- Follow scroll, as on the site: the stage scrolls under pinned vines and the scroll position
+  is the growth. Scroll length sets how many screens a full grow takes.
+- Until the first scroll, Keep growing loops 0 to 1, holds, and recedes, so the index tile
+  (which cannot be scrolled) still moves. Moving Growth by hand stops the loop there.

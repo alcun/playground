@@ -50,10 +50,12 @@ function makeVine(seed: number, p: Params) {
 
 export const demo: Demo = {
   title: "Vines",
-  description: "Seeded vines creeping in from the corners, a leaf opening at every turn.",
+  description: "Seeded vines creeping in from the corners as you scroll, a leaf opening at every turn.",
   updated: "2026-11-24",
   controls: [
     { type: "range", key: "growth", label: "Growth", min: 0, max: 1, step: 0.001, value: 1 },
+    { type: "toggle", key: "scroll", label: "Follow scroll", value: true },
+    { type: "range", key: "pages", label: "Scroll length", min: 1.5, max: 10, step: 0.5, value: 4 },
     { type: "toggle", key: "animate", label: "Keep growing", value: true },
     { type: "range", key: "speed", label: "Grow time", min: 1, max: 20, step: 0.5, value: 6, unit: "s" },
     { type: "range", key: "vines", label: "Vines", min: 1, max: 4, step: 1, value: 4 },
@@ -71,10 +73,31 @@ export const demo: Demo = {
   ],
   mount(stage, initial) {
     let p: Params = initial;
+    // Like the Shangri-La header: the vines sit still while the page scrolls under them, and the
+    // scroll position is the growth. The stage gets its own scroller so the demo page has something to scroll.
+    const scroller = document.createElement("div");
+    Object.assign(scroller.style, { position: "absolute", inset: "0", overflowY: "auto", overscrollBehavior: "contain" });
+    const pin = document.createElement("div");
+    Object.assign(pin.style, { position: "sticky", top: "0", height: "100%", marginBottom: "-100%" });
+    const track = document.createElement("div");
     const svg = document.createElementNS(SVGNS, "svg");
     svg.setAttribute("aria-hidden", "true");
     Object.assign(svg.style, { position: "absolute", inset: "0", width: "100%", height: "100%" });
-    stage.append(svg);
+    pin.append(svg);
+    scroller.append(pin, track);
+    stage.append(scroller);
+    let scrolled = false; // until someone scrolls, the loop keeps it alive (and the index tile cannot scroll)
+    const sizeTrack = () => { track.style.height = p.scroll ? `${Number(p.pages) * 100}%` : "100%"; };
+    const onScroll = () => {
+      if (!p.scroll) return;
+      const max = scroller.scrollHeight - scroller.clientHeight;
+      if (max <= 0) return;
+      scrolled = true;
+      cancelAnimationFrame(raf); raf = 0;
+      g = Math.min(1, Math.max(0, scroller.scrollTop / max));
+      paint();
+    };
+    scroller.addEventListener("scroll", onScroll, { passive: true });
     let stems: SVGPathElement[] = [];
     let leaves: { el: SVGPathElement; at: number }[] = [];
     let raf = 0, last = 0, g = Number(p.growth), dir = 1, hold = 0;
@@ -82,7 +105,7 @@ export const demo: Demo = {
     function build() {
       svg.replaceChildren();
       stems = []; leaves = [];
-      const { width: W, height: H } = stage.getBoundingClientRect();
+      const W = scroller.clientWidth, H = scroller.clientHeight; // inside the scrollbar, if there is one
       for (let i = 0; i < Number(p.vines); i++) {
         const corner = CORNERS[i];
         const v = makeVine(Number(p.seed) * 7 + i * 101, p);
@@ -119,7 +142,7 @@ export const demo: Demo = {
       for (const l of leaves) l.el.style.transform = `scale(${g >= l.at ? 1 : 0})`;
     }
 
-    const looping = () => p.animate && !reducedMotion();
+    const looping = () => p.animate && !reducedMotion() && !(p.scroll && scrolled);
     function frame(now: number) {
       const dt = Math.min(0.05, (now - last) / 1000 || 0);
       last = now;
@@ -136,6 +159,7 @@ export const demo: Demo = {
 
     const ro = new ResizeObserver(build);
     ro.observe(stage);
+    sizeTrack();
     build();
     if (looping()) { g = 0; wake(); }
 
@@ -143,12 +167,14 @@ export const demo: Demo = {
       update(next) {
         const grew = next.growth !== p.growth;
         p = next;
+        sizeTrack();
+        if (!p.scroll) scrolled = false;
         if (grew) { g = Number(p.growth); if (p.animate) { cancelAnimationFrame(raf); raf = 0; } }
         build();
         if (!grew) wake();
       },
-      reset() { g = looping() ? 0 : Number(p.growth); dir = 1; hold = 0; paint(); wake(); },
-      destroy() { cancelAnimationFrame(raf); ro.disconnect(); svg.remove(); },
+      reset() { scrolled = false; scroller.scrollTop = 0; g = looping() ? 0 : Number(p.growth); dir = 1; hold = 0; paint(); wake(); },
+      destroy() { cancelAnimationFrame(raf); ro.disconnect(); scroller.remove(); },
     };
   },
 };
