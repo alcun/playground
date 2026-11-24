@@ -23,6 +23,7 @@
   From the Ensō app's carver.
 - Pull: a face on a cord. Pull it and let go, or tap it to flip; tension, friction and mass
   are sliders.
+- Paper: a sheet of paper from clack that bends like paper. Grab it anywhere and fling it.
 
 ## 2026-11-19, shadcn
 
