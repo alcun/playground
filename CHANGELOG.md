@@ -18,13 +18,14 @@
 - Pixel sky: the alcun.dev pixel sky. Scrub the hour from dawn to night, set the moon's
   phase or use tonight's, and run it as a timelapse.
 - Eyes: a crowd of googly eyes that follow your pointer, blink, and look around when
-  you leave.
+  you leave. The whites stay white in dark mode.
 - Seal: carve a hanko with a blade, straight cuts and clean corners, stamped in vermilion.
   From the Ensō app's carver.
 - Pull: a face on a cord. Pull it and let go, or tap it to flip; tension, friction and mass
   are sliders.
 - Paper: a sheet of paper from clack that bends like paper. Grab it anywhere and fling it.
 - Dot matrix: a scrolling LED sign in departure-board amber. Type your own message.
+- Confetti: tap anywhere for a burst; every piece turns over as it falls.
 
 ## 2026-11-19, shadcn
 
