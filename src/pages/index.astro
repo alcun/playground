@@ -13,7 +13,7 @@ import { demos } from "../lib/registry";
         <li class="border-b sm:border-r">
           <a href={`/${d.slug}/`} class="group relative block aspect-square focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring">
             <div data-live={d.slug} class="stage pointer-events-none absolute inset-0 overflow-hidden"></div>
-            <span class="absolute bottom-3 left-4 text-sm font-medium">{d.title}</span>
+            <span class="absolute bottom-3 left-3 rounded-md bg-background/85 px-1.5 py-0.5 text-sm font-medium">{d.title}</span>
           </a>
         </li>
       ))}

@@ -7,6 +7,13 @@
 - The index is a wall of the toys themselves, running live in square tiles with
   their names, instead of cards of text. Each toy only runs while it is on screen.
 
+### Added
+
+- Lawn: grass in a breeze that you mow by dragging across it, and it grows back.
+- Vines: seeded vines growing in from the corners, with a leaf opening at every turn.
+- Lightbox: tap a picture and watch it open blurred and sharpen when the full one
+  arrives, with a slider for how slow the network is.
+
 ## 2026-11-19, shadcn
 
 ### Changed
