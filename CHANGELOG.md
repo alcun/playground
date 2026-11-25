@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Name badge: the tilting badge from Eponymous, rebuilt without its 3D library, with a generated spiral behind it.
+- Washi: a seamless washi paper grain generator, from the grain on the Ensō app's paper.
+
 ## 25 November 2026, later
 
 ### Removed
