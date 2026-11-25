@@ -1,5 +1,11 @@
 # Changelog
 
+## 25 November 2026, later
+
+### Removed
+
+- Confetti, which was not original work.
+
 ## 25 November 2026
 
 ### Added
