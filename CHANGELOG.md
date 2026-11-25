@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Removed
+
+- Water, whose shader was not original work.
+
 ### Added
 
 - Name badge: the tilting badge from Eponymous, rebuilt without its 3D library, with a generated spiral behind it.
