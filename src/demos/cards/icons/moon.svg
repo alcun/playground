@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" shape-rendering="crispEdges" role="img" aria-label="A pixel moon">
+  <rect width="64" height="64" rx="12" fill="#27324f"/>
+  <path fill="#e9ecd9" d="M24 10h16v4h8v5h5v8h4v12h-4v8h-5v5h-8v4H24v-4h-8v-5h-5v-8H7V27h4v-8h5v-5h8z"/>
+  <path fill="#9fb0c9" opacity=".55" d="M18 20h8v7h-8zm20-2h7v6h-7zM28 34h10v9H28zm14 10h6v5h-6zM16 42h7v6h-7z"/>
+  <path fill="#f1ece2" opacity=".35" d="M12 29h7v7h-7zm18-14h5v5h-5z"/>
+</svg>

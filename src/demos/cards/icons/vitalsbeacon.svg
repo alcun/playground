@@ -1,0 +1,28 @@
+<svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="VitalsBeacon">
+  <defs>
+    <linearGradient id="navy" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#182238"/>
+      <stop offset="1" stop-color="#0d1420"/>
+    </linearGradient>
+    <radialGradient id="brass" cx="0.32" cy="0.26" r="0.95">
+      <stop offset="0" stop-color="#e6c88a"/>
+      <stop offset="0.5" stop-color="#b18d4e"/>
+      <stop offset="1" stop-color="#5c4520"/>
+    </radialGradient>
+    <radialGradient id="face" cx="0.5" cy="0.42" r="0.75">
+      <stop offset="0" stop-color="#1a2436"/>
+      <stop offset="1" stop-color="#0a101c"/>
+    </radialGradient>
+    <radialGradient id="pivot" cx="0.35" cy="0.3" r="0.9">
+      <stop offset="0" stop-color="#eed9a0"/>
+      <stop offset="1" stop-color="#5c4520"/>
+    </radialGradient>
+  </defs>
+  <rect x="0" y="0" width="240" height="240" rx="52" fill="url(#navy)"/>
+  <circle cx="120" cy="120" r="88" fill="url(#brass)"/>
+  <circle cx="120" cy="120" r="70" fill="url(#face)"/>
+  <circle cx="120" cy="120" r="70" fill="none" stroke="#463516" stroke-width="2"/>
+  <polygon points="172.9,97.2 122.1,124.5 107.3,126.0 117.9,115.5" fill="#f0b45c"/>
+  <circle cx="120" cy="120" r="8" fill="url(#pivot)"/>
+  <circle cx="120" cy="120" r="3" fill="#2a2016"/>
+</svg>

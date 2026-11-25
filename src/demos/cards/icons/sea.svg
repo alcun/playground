@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" shape-rendering="crispEdges" role="img" aria-label="A pixel sailboat at sea">
+  <rect width="64" height="64" rx="12" fill="#c3d9ea"/>
+  <rect y="32" width="64" height="32" fill="#8b99a0"/>
+  <path fill="#f6efe2" d="M9 13h12v4H9zm-4 4h22v4H5z"/>
+  <path fill="#5a4a3f" d="M31 18h3v25h-3zM34 22l14 16H34z"/>
+  <path fill="#efe7d8" d="M29 22 16 38h13z"/>
+  <path fill="#6c646c" d="M15 42h35l-6 8H21z"/>
+  <path fill="#c3d9ea" opacity=".7" d="M3 54h18v3H3zm29 3h25v3H32z"/>
+</svg>

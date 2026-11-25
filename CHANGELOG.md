@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Hanging cards: the cards on a rope from the alcun.dev homepage. Brush them, scroll them or lift the rope.
+
 ## 24 November 2026, evening
 
 ### Added
