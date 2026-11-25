@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 25 November 2026
 
 ### Added
 
