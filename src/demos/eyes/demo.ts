@@ -8,6 +8,7 @@ export const demo: Demo = {
   title: "Eyes",
   description: "A crowd of eyes that follow your pointer, blink, and look around when you leave.",
   updated: "2026-11-24",
+  tile: 640,
   controls: [
     { type: "range", key: "count", label: "Eyes", min: 1, max: 60, step: 1, value: 12 },
     { type: "range", key: "size", label: "Size", min: 16, max: 200, step: 1, value: 64, unit: "px" },
@@ -33,7 +34,7 @@ export const demo: Demo = {
 
     function build() {
       root.replaceChildren(); eyes = [];
-      const { width: W, height: H } = stage.getBoundingClientRect();
+      const W = stage.clientWidth, H = stage.clientHeight; // layout size: the index tile scales the stage down with a transform
       const n = Number(p.count), s = Number(p.size), pair = Boolean(p.pair);
       const units = pair ? Math.ceil(n / 2) : n;
       const cols = Math.max(1, Math.round(Math.sqrt((units * W) / Math.max(1, H) / (pair ? 2 : 1))));
@@ -72,7 +73,7 @@ export const demo: Demo = {
       // Nobody pointing: pick somewhere to look every couple of seconds.
       if (!target) {
         wander.t -= dt;
-        if (wander.t <= 0) { const b = stage.getBoundingClientRect(); wander = { x: Math.random() * b.width, y: Math.random() * b.height, t: 1.2 + Math.random() * 2.5 }; }
+        if (wander.t <= 0) { wander = { x: Math.random() * stage.clientWidth, y: Math.random() * stage.clientHeight, t: 1.2 + Math.random() * 2.5 }; }
       }
       const look = target ?? wander;
       const lag = Number(p.lag), k = (1 - lag) * 60, damp = 2 * Math.sqrt(k) * (1 - Number(p.wobble) * 0.85);

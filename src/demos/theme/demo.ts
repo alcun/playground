@@ -74,6 +74,7 @@ export const demo: Demo = {
   title: "Theme",
   description: "The alcun.dev theme panel. Pick a mode or scrub the day and the whole page repaints.",
   updated: "2026-11-24",
+  tile: 680,
   controls: [
     { type: "range", key: "hour", label: "Hour", min: 0, max: 23.9, step: 0.05, value: 18.9 },
     { type: "toggle", key: "clock", label: "Follow clock", value: false },

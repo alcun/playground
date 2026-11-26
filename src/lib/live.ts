@@ -12,7 +12,20 @@ export async function mountInto(el: HTMLElement, slug: string) {
   live.delete(el);
   el.replaceChildren();
   const demo = await load(slug);
-  live.set(el, demo.mount(el, defaultsOf(demo.controls)));
+  let target = el, ro: ResizeObserver | undefined;
+  if (demo.tile) {
+    // A big-stage demo: render at its own size and scale the whole thing down, like a thumbnail.
+    const size = demo.tile;
+    target = document.createElement("div");
+    Object.assign(target.style, { position: "absolute", left: "0", top: "0", width: `${size}px`, height: `${size}px`, transformOrigin: "0 0" });
+    el.append(target);
+    const fit = () => { target.style.transform = `scale(${el.clientWidth / size})`; };
+    fit();
+    ro = new ResizeObserver(fit);
+    ro.observe(el);
+  }
+  const inst = demo.mount(target, defaultsOf(demo.controls));
+  live.set(el, { ...inst, destroy() { ro?.disconnect(); inst.destroy(); } });
 }
 
 export function watch(selector = "[data-live]") {

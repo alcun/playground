@@ -49,7 +49,7 @@ export const demo: Demo = {
     { type: "range", key: "pull", label: "Scroll pull", min: 0, max: 0.04, step: 0.001, value: 0.01 },
     { type: "range", key: "maxAngle", label: "Max swing", min: 5, max: 60, step: 1, value: 22, unit: "°" },
     { type: "range", key: "hanger", label: "Hanger", min: 6, max: 60, step: 1, value: 18, unit: "px" },
-    { type: "range", key: "sag", label: "Swag", min: 0, max: 70, step: 1, value: 30, unit: "px" },
+    { type: "range", key: "sag", label: "Swag", min: 0, max: 260, step: 1, value: 30, unit: "px" },
     { type: "range", key: "lift", label: "Rope lift", min: 0, max: 80, step: 1, value: 26, unit: "px" },
     { type: "range", key: "ropeK", label: "Rope spring", min: 0.005, max: 0.15, step: 0.001, value: 0.03 },
     { type: "range", key: "ropeDamp", label: "Rope damping", min: 0.5, max: 0.98, step: 0.01, value: 0.83 },

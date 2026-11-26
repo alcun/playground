@@ -30,6 +30,8 @@ export interface Demo {
   /** YYYY-MM-DD of the last meaningful change; orders demos not placed in ORDER in registry.ts. */
   updated: string;
   controls: Control[];
+  /** Optional: lay the index tile out at this many px square, then shrink it to fit. For demos built for a big stage. */
+  tile?: number;
   /** Runs in the browser only. Never touch the DOM at module top level. */
   mount(stage: HTMLElement, params: Params): Instance;
 }

@@ -9,7 +9,10 @@
 
 ### Added
 
+- Train: the Signalboarder footer train rebuilt in dots, with sliders for carriages, speed, how often one comes, size and rock.
 - Hanging cards: a Cards slider, from 1 up to all 13. The rope always spans the stage, and fewer cards grow to fill it.
+- Hanging cards: Swag goes much further, up to 260px of slack.
+- Theme and Eyes: their index tiles show the whole demo shrunk to fit, instead of a cramped corner of it.
 - Lightbox: the pictures sit centred, three across, and lift and grow a little on hover, as on the Mono Studio site.
 
 ## 26 November 2026
