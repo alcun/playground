@@ -6,6 +6,7 @@ import { reducedMotion } from "../../lib/theme";
 export const demo: Demo = {
   title: "Dot matrix",
   description: "A scrolling LED sign. Type your own message; every dot is its own light.",
+  origin: "From Signalboarder, the live train board.",
   updated: "2026-11-26",
   controls: [
     { type: "text", key: "text", label: "Message", value: "12:04  London Euston  Platform 1  On time" },

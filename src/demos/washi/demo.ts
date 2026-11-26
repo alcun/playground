@@ -14,6 +14,7 @@ const mulberry = (a: number) => () => {
 export const demo: Demo = {
   title: "Washi",
   description: "A seamless washi paper grain, generated: tooth, flecks and long kozo fibres.",
+  origin: "From the Ensō app, the grain on its paper.",
   updated: "2026-11-25",
   controls: [
     { type: "range", key: "fibres", label: "Fibres", min: 0, max: 1500, step: 10, value: 320 },

@@ -19,6 +19,7 @@ function rand(seed: number) {
 export const demo: Demo = {
   title: "Lawn",
   description: "Grass in a breeze. Drag across it to mow a stripe and watch it grow back.",
+  origin: "From the Shangri-La Gardening site footer.",
   updated: "2026-11-24",
   controls: [
     { type: "range", key: "height", label: "Height", min: 20, max: 400, step: 1, value: 200, unit: "px" },

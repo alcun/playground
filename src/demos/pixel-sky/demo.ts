@@ -40,6 +40,7 @@ function rand(seed: number) {
 export const demo: Demo = {
   title: "Pixel sky",
   description: "The alcun.dev pixel sky. Scrub the hour and watch dawn, day, sunset and the moon's real phase.",
+  origin: "From the alcun.dev banner.",
   updated: "2026-11-24",
   controls: [
     { type: "range", key: "hour", label: "Hour", min: 0, max: 24, step: 0.05, value: 21.5 },

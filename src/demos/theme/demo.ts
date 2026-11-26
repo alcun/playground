@@ -72,6 +72,7 @@ const icon = (m: Exclude<Mode, "time">, size: number) =>
 
 export const demo: Demo = {
   title: "Theme",
+  origin: "From alcun.dev: its theme panel.",
   description: "The alcun.dev theme panel. Pick a mode or scrub the day and the whole page repaints.",
   updated: "2026-11-24",
   tile: 680,

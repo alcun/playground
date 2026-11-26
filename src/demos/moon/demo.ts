@@ -58,6 +58,7 @@ const RAD = Math.PI / 180;
 export const demo: Demo = {
   title: "Moon",
   description: "The moon from Lune, on NASA's maps. Scrub the phase, drag to turn it, and let go.",
+  origin: "From Lune, the moon app.",
   updated: "2026-11-24",
   controls: [
     { type: "range", key: "phase", label: "Phase", min: 0, max: 1, step: 0.002, value: 0.32 },

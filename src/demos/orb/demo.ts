@@ -15,6 +15,7 @@ const rgb = (hex: Params[string]) => {
 export const demo: Demo = {
   title: "Orb",
   description: "Light woven through a dark sphere. Press and hold to talk to it; let go and it turns gold.",
+  origin: "From Heyra, the speech-to-text app: the orb you hold to talk.",
   updated: "2026-11-19",
   controls: [
     { type: "range", key: "size", label: "Size", min: 0.2, max: 1.4, step: 0.01, value: 0.85 },

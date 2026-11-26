@@ -6,6 +6,7 @@ type Eye = { el: HTMLDivElement; pupil: HTMLDivElement; lid: HTMLDivElement; cx:
 
 export const demo: Demo = {
   title: "Eyes",
+  origin: "From alcun.dev: the old googly eyes.",
   description: "A crowd of eyes that follow your pointer, blink, and look around when you leave.",
   updated: "2026-11-24",
   tile: 640,

@@ -34,6 +34,7 @@ function enso(speed: number, gap: number): Point[] {
 export const demo: Demo = {
   title: "Ink brush",
   description: "A sumi brush with kasure, bleed and paper tooth. Paint on the paper; every stroke repaints as you move a slider.",
+  origin: "From Sumicat, the shared ink canvas: the same brush.",
   updated: "2026-11-19",
   controls: [
     { type: "range", key: "wetness", label: "Wetness", min: 0, max: 1, step: 0.01, value: 0.5 },

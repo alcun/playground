@@ -9,6 +9,7 @@ const SVGNS = "http://www.w3.org/2000/svg";
 
 export const demo: Demo = {
   title: "Name badge",
+  origin: "From Eponymous, the Astro template.",
   description: "The Eponymous name badge. It tilts toward your pointer in layers.",
   updated: "2026-11-25",
   controls: [

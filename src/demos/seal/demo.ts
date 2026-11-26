@@ -61,6 +61,7 @@ function trueCut(raw: Pt[], tol: number, minRun: number, n: number): Pt[] {
 export const demo: Demo = {
   title: "Seal",
   description: "Carve a hanko with a blade, not a brush. Straight cuts, clean corners, stamped in vermilion.",
+  origin: "From the Ensō app's hanko carver.",
   updated: "2026-11-24",
   controls: [
     { type: "toggle", key: "cut", label: "Cut (hakubun)", value: true },

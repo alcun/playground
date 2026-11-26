@@ -7,6 +7,7 @@ const SVGNS = "http://www.w3.org/2000/svg";
 
 export const demo: Demo = {
   title: "Pull",
+  origin: "From alcun.dev: the old hanging avatar.",
   description: "A face on a cord. Pull it and let go; tap it and it flips.",
   updated: "2026-11-24",
   controls: [

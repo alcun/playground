@@ -51,6 +51,7 @@ function makeVine(seed: number, p: Params) {
 export const demo: Demo = {
   title: "Vines",
   description: "Seeded vines creeping in from the corners as you scroll, a leaf opening at every turn.",
+  origin: "From the Shangri-La Gardening site header.",
   updated: "2026-11-24",
   controls: [
     { type: "range", key: "growth", label: "Growth", min: 0, max: 1, step: 0.001, value: 1 },

@@ -14,6 +14,7 @@ const NEAR = 6, FAR = 420;
 export const demo: Demo = {
   title: "Sea",
   description: "A rolling sea from four summed waves, seen from a boat's height.",
+  origin: "From the sea world on alcun.dev.",
   updated: "2026-11-19",
   controls: [
     { type: "range", key: "swell", label: "Swell", min: 0, max: 3, step: 0.05, value: 1 },

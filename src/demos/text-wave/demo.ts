@@ -28,6 +28,7 @@ function lines(text: string, glintWords: string): Line[] {
 
 export const demo: Demo = {
   title: "Text wave",
+  origin: "From Heyra.",
   description: "Two ASCII swells passing each other, with lines of text streaming through one side.",
   updated: "2026-11-19",
   controls: [

@@ -5,10 +5,10 @@ import DemoPanel from "../components/DemoPanel.tsx";
 import { demos } from "../lib/registry";
 
 export function getStaticPaths() {
-  return demos.map((d) => ({ params: { slug: d.slug }, props: { title: d.title, description: d.description } }));
+  return demos.map((d) => ({ params: { slug: d.slug }, props: { title: d.title, description: d.description, origin: d.origin } }));
 }
 const { slug } = Astro.params;
-const { title, description } = Astro.props;
+const { title, description, origin } = Astro.props;
 ---
 <Base title={`${title} · Playground`} description={description}>
   <Mark />
@@ -17,6 +17,7 @@ const { title, description } = Astro.props;
     <aside class="max-h-[45svh] overflow-y-auto border-t p-4 md:max-h-none md:border-t-0 md:border-l">
       <h1 class="mb-4 text-sm font-medium">{title}</h1>
       <DemoPanel client:load slug={slug} stageId="stage" />
+      {origin && <p class="mt-6 text-xs text-muted-foreground">{origin}</p>}
     </aside>
   </div>
 </Base>

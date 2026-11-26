@@ -41,6 +41,7 @@ function carriage(kind: Kind): Uint8Array {
 export const demo: Demo = {
   title: "Train",
   description: "The Signalboarder footer train, in dots. Add carriages, speed it up and send them more often.",
+  origin: "From the Signalboarder footer.",
   updated: "2026-11-26",
   controls: [
     { type: "range", key: "cars", label: "Carriages", min: 2, max: 12, step: 1, value: 4 },

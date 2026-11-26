@@ -8,6 +8,7 @@ const GRAB_RADIUS = 26; // px from a point to pick it up
 
 export const demo: Demo = {
   title: "Rope",
+  origin: "From the alcun.dev footer.",
   description: "A Verlet rope. Grab any point and swing it; drop an end and it stays put.",
   updated: "2026-11-19",
   controls: [

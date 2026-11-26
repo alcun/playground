@@ -27,6 +27,8 @@ export interface Instance {
 export interface Demo {
   title: string;
   description: string;
+  /** Where Al first used it, shown small under the controls. */
+  origin?: string;
   /** YYYY-MM-DD of the last meaningful change; orders demos not placed in ORDER in registry.ts. */
   updated: string;
   controls: Control[];

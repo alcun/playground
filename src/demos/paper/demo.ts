@@ -36,6 +36,7 @@ function sheet(paper: string, ink: string): HTMLCanvasElement {
 export const demo: Demo = {
   title: "Paper",
   description: "A sheet of paper that bends like paper. Grab it anywhere, fling it, let it settle.",
+  origin: "From clack, the browser typewriter: its sheet of paper.",
   updated: "2026-11-24",
   controls: [
     { type: "range", key: "gravity", label: "Gravity", min: 0, max: 0.6, step: 0.005, value: 0.115 },

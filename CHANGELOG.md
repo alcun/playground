@@ -9,6 +9,7 @@
 
 ### Added
 
+- Every toy page says where the toy first lived, in a line under its controls.
 - Train: the Signalboarder footer train rebuilt in dots, with sliders for carriages, speed, how often one comes, size and rock.
 - Hanging cards: a Cards slider, from 1 up to all 13. The rope always spans the stage, and fewer cards grow to fill it.
 - Hanging cards: Swag goes much further, up to 260px of slack.

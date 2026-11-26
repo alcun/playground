@@ -20,6 +20,7 @@ type Letter = THREE.Mesh<THREE.BufferGeometry, THREE.MeshPhysicalMaterial> & {
 export const demo: Demo = {
   title: "Jelly letters",
   description: "Dally's jelly letters. Grab a letter, pull, and let it wobble back.",
+  origin: "From Dally, where the letters wobble when you grab them.",
   updated: "2026-11-24",
   controls: [
     { type: "text", key: "text", label: "Words", value: "dally / along" },

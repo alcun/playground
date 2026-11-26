@@ -62,6 +62,7 @@ function clamped(src: HTMLImageElement, w: number, h: number, m: number): HTMLCa
 export const demo: Demo = {
   title: "Lightbox",
   description: "Tap a picture. It opens on the blurred thumbnail and sharpens when the full one arrives.",
+  origin: "From the Shangri-La Gardening gallery.",
   updated: "2026-11-24",
   controls: [
     { type: "range", key: "delay", label: "Network", min: 0, max: 4000, step: 50, value: 900, unit: "ms" },
