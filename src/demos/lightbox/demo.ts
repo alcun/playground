@@ -63,8 +63,10 @@ export const demo: Demo = {
   title: "Lightbox",
   description: "Tap a picture. It opens on the blurred thumbnail and sharpens when the full one arrives.",
   origin: "From the Shangri-La Gardening gallery.",
-  updated: "2026-11-24",
+  updated: "2026-11-26",
   controls: [
+    { type: "range", key: "lift", label: "Lift", min: 0, max: 24, step: 0.5, value: 5, unit: "px" },
+    { type: "range", key: "reach", label: "Reach", min: 0.5, max: 6, step: 0.1, value: 2.2 },
     { type: "range", key: "delay", label: "Network", min: 0, max: 4000, step: 50, value: 900, unit: "ms" },
     { type: "range", key: "thumb", label: "Thumb size", min: 4, max: 600, step: 1, value: 280, unit: "px" },
     { type: "range", key: "blur", label: "Blur", min: 0, max: 60, step: 1, value: 16, unit: "px" },
@@ -82,11 +84,27 @@ export const demo: Demo = {
     Object.assign(root.style, { position: "absolute", inset: "0", overflow: "auto", padding: "16px", display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 220px))", gap: "10px", alignContent: "center", justifyContent: "center" });
     // The Mono Studio gallery hover: a small lift and a 2.5% grow.
     const css = document.createElement("style");
-    css.textContent = `.lb-thumb { transition: transform .25s cubic-bezier(.2,.8,.25,1), box-shadow .25s ease; }
-      @media (hover: hover) and (pointer: fine) { .lb-thumb:hover { transform: translateY(-5px) scale(1.025); box-shadow: 0 14px 28px -14px rgba(0,0,0,.45); } }
+    // The Mono Studio screenshot strip: every picture rises by how close the pointer is to its centre,
+    // so neighbours lean in too. There it is a row and measures x only; this is a grid, so it measures distance.
+    css.textContent = `.lb-thumb { --focus: 0; transform: translateY(calc(var(--focus) * var(--lift) * -1px)) scale(calc(1 + var(--focus) * var(--lift) * .005));
+        box-shadow: 0 calc(8px + var(--focus) * 8px) calc(20px + var(--focus) * 14px) -14px rgba(0,0,0,calc(.15 + var(--focus) * .3));
+        transition: transform .24s cubic-bezier(.2,.8,.25,1), box-shadow .24s ease; }
       .lb-thumb:focus-visible { outline: 2px solid var(--glint); outline-offset: 2px; }
       @media (prefers-reduced-motion: reduce) { .lb-thumb { transition: none; } }`;
     stage.append(css, root);
+    const focusOn = (e: PointerEvent) => {
+      if (e.pointerType === "touch") return;
+      root.style.setProperty("--lift", String(Number(p.lift)));
+      for (const t of root.querySelectorAll<HTMLElement>(".lb-thumb")) {
+        const r = t.getBoundingClientRect();
+        const reach = Math.max(r.width * Number(p.reach), 120);
+        const d = Math.hypot(e.clientX - (r.left + r.width / 2), e.clientY - (r.top + r.height / 2));
+        t.style.setProperty("--focus", Math.max(0, 1 - d / reach).toFixed(3));
+      }
+    };
+    const unfocus = () => root.querySelectorAll<HTMLElement>(".lb-thumb").forEach((t) => t.style.setProperty("--focus", "0"));
+    root.addEventListener("pointermove", focusOn);
+    root.addEventListener("pointerleave", unfocus);
 
     const full = new Map<number, string>(); // picture index -> full-size data URL, once "downloaded"
     const pending = new Map<number, Promise<string>>();

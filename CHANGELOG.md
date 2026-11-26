@@ -4,6 +4,7 @@
 
 ### Changed
 
+- Lightbox: the pictures rise toward the pointer the way the Mono Studio screenshots do, the nearest most and its neighbours a little, with Lift and Reach sliders.
 - The rules for adding a toy now cover its "from" line and the shrink-to-fit index tile.
 
 ## 26 November 2026, evening
@@ -28,7 +29,7 @@
 - Pull feels like alcun.dev again: the heavy release spring and the stretchy drag are back, and a plain avatar replaces the smiley face.
 - Hanging cards: Swag goes much further, up to 260px of slack.
 - Theme and Eyes: their index tiles show the whole demo shrunk to fit, instead of a cramped corner of it.
-- Lightbox: the pictures sit centred, three across, and lift and grow a little on hover, as on the Mono Studio site.
+- Lightbox: the pictures sit centred, three across.
 
 ## 26 November 2026
 

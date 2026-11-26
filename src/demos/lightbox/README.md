@@ -14,3 +14,7 @@ press     -> starts the download early (Preload on touch), so a tap often opens 
   fades out past the clip and the two layers line up. Blurring the picture
   element itself (the first version) spilled a soft halo past its edges while it sharpened.
 - A new Network value forgets what was "downloaded", so the next tap shows the wait again.
+- The grid copies the Mono Studio screenshot strip: each picture lifts and grows by how
+  close the pointer is to its centre (Lift, Reach in picture-widths), so neighbours lean
+  in too. The strip is one row and measures x only; this grid measures distance. Mice and
+  pens only; touch has nothing to follow.
