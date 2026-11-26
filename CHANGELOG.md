@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- The rules for adding a toy now cover its "from" line and the shrink-to-fit index tile.
+
 ## 26 November 2026, evening
 
 ### Changed

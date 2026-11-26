@@ -21,6 +21,11 @@ framework-free: plain DOM, SVG or canvas. Add shadcn components with
 - `mount` returns `update(params)` (called with the full set on any change),
   `destroy()`, and optionally `reset()` (called by the panel's Reset after the
   values are restored), for scenes with state of their own.
+- Optional fields: `origin` is one short line saying where Al first used the toy,
+  shown under the controls; `tile: N` lays the index tile out at N px square and
+  scales it down, for demos built for a big stage. A demo inside a scaled tile must
+  measure itself with `clientWidth`/`clientHeight`, not `getBoundingClientRect()`,
+  which reports the scaled size.
 - Bump `updated` on a meaningful change. The index order is the `ORDER` list in
   `src/lib/registry.ts`, most impressive first; place a new demo there.
 
