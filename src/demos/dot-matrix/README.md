@@ -13,6 +13,6 @@ frame:  every cell drawn as an LED: unlit at Unlit dots, lit ones on top with a 
 - Station font is Daniel Hart's Dot Matrix, the face Signalboarder's board uses, bundled
   under the OFL (public/fonts, with its notice). One font dot is a tenth of the em, caps
   are 7 dots, descenders 2: measured, not guessed. The dots drawn are still the board's own,
-  so dot size, glow and square LEDs still apply. Added 26 November 2026 when Al asked for
+  so dot size, glow and square LEDs still apply. Letters get one extra dark column (two in all) and a softer glow, because at one dark column the glow bridged them. Added 26 November 2026 when Al asked for
   Signalboarder's look; the smooth-font mode had read as too fat.
 - Flicker dims a few LEDs on a slow pseudo-random pattern, the way old boards misbehave.

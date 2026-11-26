@@ -4,12 +4,13 @@
 
 ### Changed
 
-- Dot matrix now draws in the Dot Matrix typeface Signalboarder's board uses, one font dot per LED, and fits a whole line on a wide screen. The smooth-font look is still there with Station font off.
+- Dot matrix now draws in the Dot Matrix typeface Signalboarder's board uses, one font dot per LED, with a clear gap between letters and a softer glow, and fits a whole line on a wide screen. It scrolls twice as many dots a second, so it keeps its old pace. The smooth-font look is still there with Station font off.
 - Lightbox: the blurred placeholder no longer spills a soft halo past the picture while it sharpens, and the sharp picture now lines up with it exactly.
 
 ### Added
 
-- Hanging cards: a Cards slider, from 2 up to all 13.
+- Hanging cards: a Cards slider, from 1 up to all 13. The rope always spans the stage, and fewer cards grow to fill it.
+- Lightbox: the pictures sit centred, three across, and lift and grow a little on hover, as on the Mono Studio site.
 
 ## 26 November 2026
 

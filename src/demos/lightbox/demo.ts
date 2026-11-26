@@ -78,8 +78,14 @@ export const demo: Demo = {
   mount(stage, initial) {
     let p: Params = initial;
     const root = document.createElement("div");
-    Object.assign(root.style, { position: "absolute", inset: "0", overflow: "auto", padding: "16px", display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: "10px", alignContent: "center" });
-    stage.append(root);
+    Object.assign(root.style, { position: "absolute", inset: "0", overflow: "auto", padding: "16px", display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 220px))", gap: "10px", alignContent: "center", justifyContent: "center" });
+    // The Mono Studio gallery hover: a small lift and a 2.5% grow.
+    const css = document.createElement("style");
+    css.textContent = `.lb-thumb { transition: transform .25s cubic-bezier(.2,.8,.25,1), box-shadow .25s ease; }
+      @media (hover: hover) and (pointer: fine) { .lb-thumb:hover { transform: translateY(-5px) scale(1.025); box-shadow: 0 14px 28px -14px rgba(0,0,0,.45); } }
+      .lb-thumb:focus-visible { outline: 2px solid var(--glint); outline-offset: 2px; }
+      @media (prefers-reduced-motion: reduce) { .lb-thumb { transition: none; } }`;
+    stage.append(css, root);
 
     const full = new Map<number, string>(); // picture index -> full-size data URL, once "downloaded"
     const pending = new Map<number, Promise<string>>();
@@ -101,6 +107,7 @@ export const demo: Demo = {
       PICS.forEach((pic, i) => {
         const b = document.createElement("button");
         b.type = "button";
+        b.className = "lb-thumb";
         b.setAttribute("aria-label", `Open picture ${i + 1}`);
         Object.assign(b.style, { padding: "0", border: "0", borderRadius: `${Number(p.radius) * 0.6}px`, overflow: "hidden", aspectRatio: "3 / 2", cursor: "zoom-in", background: "none" });
         const img = document.createElement("img");
@@ -176,7 +183,7 @@ export const demo: Demo = {
         if (thumbChanged) { close(true); makeThumbs(); }
       },
       reset() { close(true); full.clear(); },
-      destroy() { timers.forEach(clearTimeout); close(true); root.remove(); },
+      destroy() { timers.forEach(clearTimeout); close(true); root.remove(); css.remove(); },
     };
   },
 };

@@ -42,7 +42,7 @@ export const demo: Demo = {
   description: "The cards on a rope from alcun.dev. Brush them, scroll them or lift the rope.",
   updated: "2026-11-26",
   controls: [
-    { type: "range", key: "count", label: "Cards", min: 2, max: CARDS.length, step: 1, value: CARDS.length },
+    { type: "range", key: "count", label: "Cards", min: 1, max: CARDS.length, step: 1, value: CARDS.length },
     { type: "range", key: "breeze", label: "Breeze", min: 0, max: 10, step: 0.1, value: 2.4, unit: "°" },
     { type: "range", key: "coupling", label: "Coupling", min: 0, max: 0.03, step: 0.0002, value: 0.0038 },
     { type: "range", key: "damping", label: "Damping", min: 0.95, max: 0.999, step: 0.0005, value: 0.9855 },
@@ -69,7 +69,7 @@ export const demo: Demo = {
       .dark .hc { --card: color-mix(in srgb, var(--paper) 91%, var(--ink)); }
       .hc::-webkit-scrollbar { display: none; }
       .hc.dragging { cursor: grabbing; }
-      .hc-rig { position: relative; flex: 0 0 auto; padding: 40px 3rem 2rem; }
+      .hc-rig { position: relative; flex: 0 0 auto; box-sizing: border-box; min-width: 100%; padding: 40px 3rem 2rem; }
       .hc-wide .hc-rig { padding-inline: 8rem; }
       .hc svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; fill: none; z-index: 2; }
       .hc .grab { stroke: transparent; stroke-width: 24; pointer-events: stroke; cursor: grab; touch-action: none; -webkit-touch-callout: none; }
@@ -79,7 +79,7 @@ export const demo: Demo = {
       .hc .body { stroke: var(--rope); stroke-width: 3.5; stroke-linecap: round; }
       .hc .twist { stroke: color-mix(in srgb, var(--ink) 30%, transparent); stroke-width: 1.7; stroke-dasharray: 1.3 4.6; }
       .hc .hi { stroke: color-mix(in srgb, var(--paper) 60%, transparent); stroke-width: .9; stroke-linecap: round; }
-      .hc ul { position: relative; display: flex; align-items: flex-start; gap: 10px; list-style: none; margin: 0; padding: 0; }
+      .hc ul { position: relative; display: flex; align-items: flex-start; justify-content: center; gap: 10px; list-style: none; margin: 0; padding: 0; }
       .hc li { display: flex; flex-direction: column; align-items: center; }
       .hc-knot { position: relative; z-index: 1; width: 7px; height: 7px; border-radius: 50%; background: var(--rope);
         box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 35%, transparent); }
@@ -120,7 +120,7 @@ export const demo: Demo = {
 
     const list = document.createElement("ul");
     const items: HTMLLIElement[] = [], knots: HTMLSpanElement[] = [], swings: HTMLDivElement[] = [];
-    const hangers: HTMLSpanElement[] = [], marks: HTMLImageElement[] = [];
+    const hangers: HTMLSpanElement[] = [], marks: HTMLImageElement[] = [], cardEls: HTMLDivElement[] = [];
     let hover = -1;
     CARDS.forEach(([name, note, key], i) => {
       const li = document.createElement("li");
@@ -146,7 +146,7 @@ export const demo: Demo = {
       list.append(li);
       swing.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") { hover = i; wake(); } });
       swing.addEventListener("pointerleave", () => { if (hover === i) hover = -1; });
-      items.push(li); knots.push(knot); swings.push(swing); hangers.push(hanger); marks.push(img);
+      cardEls.push(card); items.push(li); knots.push(knot); swings.push(swing); hangers.push(hanger); marks.push(img);
     });
     rig.append(svg, list);
     scroller.append(rig);
@@ -165,8 +165,17 @@ export const demo: Demo = {
       items.forEach((li, i) => { li.style.marginTop = `${droopAt(i, span, sag)}px`; });
       hangers.forEach((h, i) => { h.style.height = `${hangerFor(i, Number(p.hanger))}px`; });
       // knot centres in rig px, measured with the lift taken out
-      const box = rig.getBoundingClientRect();
       items.forEach((li, i) => { li.style.display = i < n ? "" : "none"; });
+      // Fewer cards, bigger cards: scale them to share the width, never past the stage height.
+      // At the full set they sit at their real size and the row scrolls, as on alcun.dev.
+      cardEls.forEach((c) => { c.style.zoom = ""; });
+      const cw = cardEls[0].offsetWidth, ch = cardEls[0].offsetHeight;
+      const pad = wide ? 256 : 96;
+      const fitW = ((scroller.clientWidth - pad) / n - 10) / cw;
+      const fitH = (scroller.clientHeight * 0.6 - Number(p.hanger) - 60) / ch;
+      const z = Math.max(1, Math.min(fitW, fitH, 4));
+      cardEls.forEach((c) => { c.style.zoom = String(z); });
+      const box = rig.getBoundingClientRect();
       pts = knots.slice(0, n).map((k, i) => {
         const r = k.getBoundingClientRect();
         return [r.left - box.left + r.width / 2, r.top - box.top + r.height / 2 - ky[i]];
@@ -175,7 +184,7 @@ export const demo: Demo = {
     }
 
     function drawRope() {
-      if (pts.length < 2) return;
+      if (!pts.length) return;
       const W = rig.offsetWidth;
       const y = (i: number) => pts[i][1] + ky[i];
       let d = `M${-RUN_PAST} ${(pts[0][1] - 13).toFixed(1)} L${pts[0][0].toFixed(1)} ${y(0).toFixed(1)}`;
