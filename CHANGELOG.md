@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- The index is now a gallery of framed cards, four across on desktop and two on a phone, each with a short description under its name.
+- A small playground mark floats in the top corner of every page and leads back to the index; it replaces the breadcrumb on toy pages.
+- The site now lives at playground.alcun.dev.
+- Dot matrix starts lighter: single-dot strokes on a taller board, closer to a real station sign.
+
 ## 25 November 2026, night
 
 ### Removed

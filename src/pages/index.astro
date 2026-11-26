@@ -1,19 +1,24 @@
 ---
 import Base from "../layouts/Base.astro";
+import Mark from "../components/Mark.astro";
 import { demos } from "../lib/registry";
 ---
 <Base title="Playground" description="Small interactive demos with the knobs left on.">
-  <main>
-    <header class="flex items-baseline justify-between p-4 md:px-6">
-      <h1 class="text-sm font-medium">Playground</h1>
-      <a href="https://github.com/alcun/playground" class="text-sm text-muted-foreground hover:text-foreground">Source</a>
-    </header>
-    <ul class="grid grid-cols-1 border-t sm:grid-cols-2 lg:grid-cols-3">
+  <Mark label />
+  <a href="https://github.com/alcun/playground" class="fixed top-3 right-3 z-50 flex h-9 items-center rounded-xl bg-background/80 px-3 text-sm text-muted-foreground shadow-sm ring-1 ring-border backdrop-blur-md hover:text-foreground md:top-4 md:right-4">Source</a>
+  <main class="mx-auto max-w-6xl px-4 pt-20 pb-16 md:px-6 md:pt-24">
+    <h1 class="sr-only">Playground</h1>
+    <ul class="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-4">
       {demos.map((d) => (
-        <li class="border-b sm:border-r">
-          <a href={`/${d.slug}/`} class="group relative block aspect-square focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring">
-            <div data-live={d.slug} class="stage pointer-events-none absolute inset-0 overflow-hidden"></div>
-            <span class="absolute bottom-3 left-3 rounded-md bg-background/85 px-1.5 py-0.5 text-sm font-medium">{d.title}</span>
+        <li>
+          <a href={`/${d.slug}/`} class="group block h-full rounded-2xl bg-muted/40 p-1.5 ring-1 ring-border transition-shadow hover:ring-foreground/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+            <div class="relative aspect-square overflow-hidden rounded-[0.9rem]">
+              <div data-live={d.slug} class="stage pointer-events-none absolute inset-0 overflow-hidden"></div>
+            </div>
+            <div class="px-1.5 pt-2 pb-1.5">
+              <p class="truncate text-sm font-medium">{d.title}</p>
+              <p class="mt-0.5 line-clamp-2 text-xs leading-snug text-muted-foreground">{d.description}</p>
+            </div>
           </a>
         </li>
       ))}

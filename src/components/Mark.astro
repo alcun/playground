@@ -1,0 +1,14 @@
+---
+// The playground mark, floating top-left on every page. Links home.
+interface Props { label?: boolean }
+const { label = false } = Astro.props;
+---
+<a href="/" aria-label="Playground home"
+  class="fixed top-3 left-3 z-50 flex h-9 items-center gap-2 rounded-xl bg-background/80 pr-3 pl-1 shadow-sm ring-1 ring-border backdrop-blur-md transition-colors hover:ring-foreground/30 md:top-4 md:left-4"
+  class:list={[!label && "pr-1"]}>
+  <svg viewBox="0 0 32 32" class="size-7" aria-hidden="true">
+    <rect width="32" height="32" rx="8" fill="var(--ink)" />
+    <path d="M6 18c4-8 8 8 10 0s6 8 10 0" fill="none" stroke="var(--glint)" stroke-width="3" stroke-linecap="round" />
+  </svg>
+  {label && <span class="text-sm font-medium">Playground</span>}
+</a>
