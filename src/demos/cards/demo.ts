@@ -40,8 +40,9 @@ const breezeAt = (i: number, s: number, amp: number) =>
 export const demo: Demo = {
   title: "Hanging cards",
   description: "The cards on a rope from alcun.dev. Brush them, scroll them or lift the rope.",
-  updated: "2026-11-25",
+  updated: "2026-11-26",
   controls: [
+    { type: "range", key: "count", label: "Cards", min: 2, max: CARDS.length, step: 1, value: CARDS.length },
     { type: "range", key: "breeze", label: "Breeze", min: 0, max: 10, step: 0.1, value: 2.4, unit: "°" },
     { type: "range", key: "coupling", label: "Coupling", min: 0, max: 0.03, step: 0.0002, value: 0.0038 },
     { type: "range", key: "damping", label: "Damping", min: 0.95, max: 0.999, step: 0.0005, value: 0.9855 },
@@ -55,7 +56,9 @@ export const demo: Demo = {
   ],
   mount(stage, initial) {
     let p: Params = initial;
-    const n = CARDS.length;
+    // Arrays hold every card; n is how many are showing. Loops run to n, so hidden cards cost nothing.
+    const N = CARDS.length;
+    let n = Number(p.count) || N;
     const still = reducedMotion();
 
     const style = document.createElement("style");
@@ -149,8 +152,8 @@ export const demo: Demo = {
     scroller.append(rig);
     stage.append(style, scroller);
 
-    const angle = new Float32Array(n), vel = new Float32Array(n);
-    const ky = new Float32Array(n), kvel = new Float32Array(n);
+    const angle = new Float32Array(N), vel = new Float32Array(N);
+    const ky = new Float32Array(N), kvel = new Float32Array(N);
     let pts: [number, number][] = [];
     let ropeGrab = -1, raf = 0, last = 0, acc = 0, clock = 0, onScreen = true;
     let lastScroll = 0, scrollDx = 0;
@@ -163,7 +166,8 @@ export const demo: Demo = {
       hangers.forEach((h, i) => { h.style.height = `${hangerFor(i, Number(p.hanger))}px`; });
       // knot centres in rig px, measured with the lift taken out
       const box = rig.getBoundingClientRect();
-      pts = knots.map((k, i) => {
+      items.forEach((li, i) => { li.style.display = i < n ? "" : "none"; });
+      pts = knots.slice(0, n).map((k, i) => {
         const r = k.getBoundingClientRect();
         return [r.left - box.left + r.width / 2, r.top - box.top + r.height / 2 - ky[i]];
       });
@@ -343,8 +347,9 @@ export const demo: Demo = {
 
     return {
       update(next) {
-        const relayout = next.sag !== p.sag || next.hanger !== p.hanger;
+        const relayout = next.sag !== p.sag || next.hanger !== p.hanger || next.count !== p.count;
         p = next;
+        n = Number(p.count) || N;
         if (relayout) layout();
         if (still) paint();
       },

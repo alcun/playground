@@ -42,6 +42,23 @@ function paint(pic: (typeof PICS)[number], w: number, h: number): HTMLCanvasElem
   return c;
 }
 
+/** The thumbnail at exactly w x h, with its edge pixels stretched m px outward on every side.
+ *  Blurred with CSS and clipped by the frame, the soft fade happens in that margin, out of sight. */
+function clamped(src: HTMLImageElement, w: number, h: number, m: number): HTMLCanvasElement {
+  const c = document.createElement("canvas");
+  c.width = w + 2 * m; c.height = h + 2 * m;
+  const x = c.getContext("2d")!;
+  const sw = src.naturalWidth, sh = src.naturalHeight;
+  x.drawImage(src, 0, 0, 1, sh, 0, m, m, h);
+  x.drawImage(src, sw - 1, 0, 1, sh, m + w, m, m, h);
+  x.drawImage(src, 0, 0, sw, 1, m, 0, w, m);
+  x.drawImage(src, 0, sh - 1, sw, 1, m, m + h, w, m);
+  for (const [sx, sy, dx, dy] of [[0, 0, 0, 0], [sw - 1, 0, m + w, 0], [0, sh - 1, 0, m + h], [sw - 1, sh - 1, m + w, m + h]])
+    x.drawImage(src, sx, sy, 1, 1, dx, dy, m, m);
+  x.drawImage(src, m, m, w, h);
+  return c;
+}
+
 export const demo: Demo = {
   title: "Lightbox",
   description: "Tap a picture. It opens on the blurred thumbnail and sharpens when the full one arrives.",
@@ -103,27 +120,42 @@ export const demo: Demo = {
       const still = reducedMotion();
       const o = document.createElement("div");
       Object.assign(o.style, { position: "absolute", inset: "0", display: "flex", alignItems: "center", justifyContent: "center", padding: "4%", cursor: "zoom-out", background: `rgba(20,30,15,${Number(p.dim)})`, backdropFilter: `blur(${Number(p.frost)}px)` });
+      // Two layers in one clipped frame: the cached thumbnail, blurred, and the full picture fading in over it.
+      const frame = document.createElement("div");
+      Object.assign(frame.style, {
+        position: "relative", overflow: "hidden", maxWidth: "100%", maxHeight: "100%", aspectRatio: "3 / 2", width: "100%",
+        borderRadius: `${Number(p.radius)}px`, boxShadow: "0 24px 70px rgba(0,0,0,.5)",
+      });
+      const b = Number(p.blur), m = Math.ceil(3 * b);
+      const ph = document.createElement("canvas");
+      Object.assign(ph.style, { position: "absolute", left: `${-m}px`, top: `${-m}px`, filter: `blur(${b}px)` });
       const img = document.createElement("img");
       img.alt = "";
       Object.assign(img.style, {
-        maxWidth: "100%", maxHeight: "100%", aspectRatio: "3 / 2", width: "100%", objectFit: "contain", borderRadius: `${Number(p.radius)}px`,
-        boxShadow: "0 24px 70px rgba(0,0,0,.5)", backgroundImage: `url(${thumbs[i].src})`, backgroundSize: "cover", backgroundPosition: "center",
-        filter: `blur(${Number(p.blur)}px)`, transition: `filter ${Number(p.sharpen)}ms ease`,
+        position: "absolute", inset: "0", width: "100%", height: "100%", objectFit: "cover",
+        opacity: "0", transition: `opacity ${Number(p.sharpen)}ms ease`,
       });
-      // An empty, transparent image until the full one lands: the blurred thumbnail behind is what you see.
-      img.src = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
-      o.append(img);
+      frame.append(ph, img);
+      o.append(frame);
       o.addEventListener("click", () => close());
       stage.append(o);
       box = o;
+      // offsetWidth ignores the opening scale animation, so this is the frame's settled size.
+      const src = clamped(thumbs[i], frame.offsetWidth, frame.offsetHeight, m);
+      ph.width = src.width; ph.height = src.height;
+      ph.getContext("2d")!.drawImage(src, 0, 0);
       if (!still) {
         o.animate([{ opacity: 0 }, { opacity: 1 }], { duration: Number(p.open) * 0.85, easing: "ease" });
-        img.animate([{ opacity: 0, transform: `scale(${Number(p.from)})` }, { opacity: 1, transform: "scale(1)" }], { duration: Number(p.open), easing: "cubic-bezier(.2,.8,.25,1)" });
+        frame.animate([{ opacity: 0, transform: `scale(${Number(p.from)})` }, { opacity: 1, transform: "scale(1)" }], { duration: Number(p.open), easing: "cubic-bezier(.2,.8,.25,1)" });
       }
       fetchFull(i).then((u) => {
         if (box !== o) return;
         img.src = u;
-        img.decode().catch(() => {}).then(() => { if (box === o) img.style.filter = "none"; });
+        img.decode().catch(() => {}).then(() => {
+          if (box !== o) return;
+          img.style.opacity = "1";
+          timers.push(window.setTimeout(() => ph.remove(), Number(p.sharpen) + 50));
+        });
       });
     }
 

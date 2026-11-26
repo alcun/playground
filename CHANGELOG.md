@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Dot matrix now draws in the Dot Matrix typeface Signalboarder's board uses, one font dot per LED, and fits a whole line on a wide screen. The smooth-font look is still there with Station font off.
+- Lightbox: the blurred placeholder no longer spills a soft halo past the picture while it sharpens, and the sharp picture now lines up with it exactly.
+
+### Added
+
+- Hanging cards: a Cards slider, from 2 up to all 13.
+
 ## 26 November 2026
 
 ### Changed

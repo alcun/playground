@@ -9,7 +9,8 @@ export const demo: Demo = {
   updated: "2026-11-26",
   controls: [
     { type: "text", key: "text", label: "Message", value: "12:04  London Euston  Platform 1  On time" },
-    { type: "range", key: "rows", label: "LED rows", min: 5, max: 40, step: 1, value: 14 },
+    { type: "toggle", key: "station", label: "Station font", value: true },
+    { type: "range", key: "rows", label: "LED rows", min: 5, max: 40, step: 1, value: 11 },
     { type: "range", key: "dot", label: "Dot size", min: 0.2, max: 1, step: 0.01, value: 0.72 },
     { type: "range", key: "speed", label: "Scroll", min: 0, max: 60, step: 0.5, value: 12, unit: "/s" },
     { type: "range", key: "glow", label: "Glow", min: 0, max: 3, step: 0.05, value: 1 },
@@ -32,17 +33,26 @@ export const demo: Demo = {
     let lit: Uint8Array = new Uint8Array(0), msgW = 1;
     let W = 0, H = 0, dpr = 1, cell = 8, cols = 0, raf = 0, last = 0, offset = 0;
 
+    // Daniel Hart's Dot Matrix, the face Signalboarder uses. It is drawn on a dot grid: one dot is
+    // a tenth of the font size, capitals are 7 dots tall, descenders 2 more. So at 10px (times a whole
+    // scale) every font dot lands on exactly one LED. Loaded here, not at module level (see CLAUDE.md).
+    const face = new FontFace("Playground Dot Matrix", "url(/fonts/dot-matrix-regular.woff2)");
+    let faceReady = false;
+    face.load().then((f) => { document.fonts.add(f); faceReady = true; if (p.station) { rasterise(); draw(performance.now()); } }).catch(() => {});
+
     function rasterise() {
-      const rows = Number(p.rows);
-      const font = `${Number(p.weight)} ${rows * 0.92}px ui-sans-serif, system-ui, sans-serif`;
+      const rows = Number(p.rows), station = Boolean(p.station) && faceReady;
+      const k = Math.max(1, Math.floor(rows / 9)); // whole-dot scale, so a font dot stays square
+      const font = station ? `${10 * k}px "Playground Dot Matrix"` : `${Number(p.weight)} ${rows * 0.92}px ui-sans-serif, system-ui, sans-serif`;
       rg.font = font;
       const text = String(p.text) || " ";
       msgW = Math.max(1, Math.ceil(rg.measureText(text).width) + rows * 3); // a gap before it comes round again
       raster.width = msgW; raster.height = rows;
-      rg.font = font; rg.textBaseline = "middle"; rg.fillStyle = "#fff";
+      rg.font = font; rg.fillStyle = "#fff";
       rg.clearRect(0, 0, msgW, rows);
-      rg.fillText(text, 0, rows / 2 + rows * 0.04);
-      const data = rg.getImageData(0, 0, msgW, rows).data, t = Number(p.threshold) * 255;
+      if (station) { rg.textBaseline = "alphabetic"; rg.fillText(text, 0, Math.floor((rows - 9 * k) / 2) + 7 * k); }
+      else { rg.textBaseline = "middle"; rg.fillText(text, 0, rows / 2 + rows * 0.04); }
+      const data = rg.getImageData(0, 0, msgW, rows).data, t = (station ? 0.5 : Number(p.threshold)) * 255;
       lit = new Uint8Array(msgW * rows);
       for (let i = 0; i < lit.length; i++) lit[i] = data[i * 4 + 3] > t ? 1 : 0;
     }
@@ -52,7 +62,7 @@ export const demo: Demo = {
       W = r.width; H = r.height;
       canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
       const rows = Number(p.rows);
-      cell = Math.max(2, Math.min((H * 0.8) / rows, W / 48)); // a board shows a phrase, not a letter
+      cell = Math.max(2, Math.min((H * 0.8) / rows, W / 96)); // a board shows a line, not a word
       cols = Math.ceil(W / cell);
       draw(0);
     }
@@ -90,7 +100,7 @@ export const demo: Demo = {
     rasterise(); layout(); wake();
     return {
       update(next) {
-        const re = ["text", "rows", "weight", "threshold"].some((k) => next[k] !== p[k]);
+        const re = ["text", "rows", "weight", "threshold", "station"].some((k) => next[k] !== p[k]);
         p = next;
         if (re) rasterise();
         layout(); wake();
