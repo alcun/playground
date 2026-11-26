@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- A new mark: a spark between curly braces, code that summons things. One colour, so it sits with the gallery in light and dark.
+
 ## 26 November 2026, later
 
 ### Changed
