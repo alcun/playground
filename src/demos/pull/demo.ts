@@ -8,12 +8,12 @@ const SVGNS = "http://www.w3.org/2000/svg";
 export const demo: Demo = {
   title: "Pull",
   origin: "From alcun.dev: the old hanging avatar.",
-  description: "A face on a cord. Pull it and let go; tap it and it flips.",
-  updated: "2026-11-24",
+  description: "An avatar on a cord. Pull it and let go, tap it to flip, or hang your own picture on it.",
+  updated: "2026-11-26",
   controls: [
     { type: "range", key: "tension", label: "Tension", min: 2, max: 400, step: 1, value: 25 },
     { type: "range", key: "friction", label: "Friction", min: 0.5, max: 60, step: 0.5, value: 6 },
-    { type: "range", key: "mass", label: "Mass", min: 0.2, max: 10, step: 0.1, value: 1 },
+    { type: "range", key: "mass", label: "Mass", min: 0.2, max: 10, step: 0.1, value: 5 },
     { type: "range", key: "reach", label: "Max pull", min: 20, max: 600, step: 5, value: 200, unit: "px" },
     { type: "range", key: "cord", label: "Cord", min: 0, max: 0.8, step: 0.01, value: 0.35 },
     { type: "range", key: "size", label: "Size", min: 40, max: 300, step: 1, value: 120, unit: "px" },
@@ -32,18 +32,70 @@ export const demo: Demo = {
     const face = document.createElement("button");
     face.type = "button";
     face.setAttribute("aria-label", "Pull me, or tap to flip");
-    face.innerHTML = `<svg viewBox="-50 -50 100 100" width="100%" height="100%" aria-hidden="true">
-      <circle r="47" fill="var(--paper)" stroke="var(--ink)" stroke-width="4"/>
-      <circle cx="-16" cy="-8" r="6" fill="var(--ink)"/><circle cx="16" cy="-8" r="6" fill="var(--ink)"/>
-      <path d="M-20 14 Q0 32 20 14" fill="none" stroke="var(--ink)" stroke-width="5" stroke-linecap="round"/>
-      <circle cx="-30" cy="10" r="7" fill="var(--glint)" opacity=".35"/><circle cx="30" cy="10" r="7" fill="var(--glint)" opacity=".35"/></svg>`;
+    // A plain avatar until the visitor picks their own picture. The picture never leaves their browser:
+    // it is shrunk to 256px and kept in this browser's storage, nowhere else.
+    const KEY = "playground:pull:picture";
+    const clip = `pull-clip-${Math.random().toString(36).slice(2)}`;
+    const avatar = `<svg viewBox="-50 -50 100 100" width="100%" height="100%" aria-hidden="true">
+      <clipPath id="${clip}"><circle r="45"/></clipPath>
+      <circle r="47" fill="var(--paper)"/>
+      <g clip-path="url(#${clip})" fill="var(--ink-faint)"><circle cy="-10" r="17"/><ellipse cy="42" rx="33" ry="26"/></g>
+      <circle r="47" fill="none" stroke="var(--ink)" stroke-width="4"/></svg>`;
+    const showFace = (url: string | null) => {
+      if (!url) { face.innerHTML = avatar; return; }
+      const img = document.createElement("img");
+      img.src = url; img.alt = ""; img.draggable = false;
+      Object.assign(img.style, { width: "100%", height: "100%", borderRadius: "50%", objectFit: "cover", boxSizing: "border-box", border: "4px solid var(--ink)", pointerEvents: "none", display: "block" });
+      face.replaceChildren(img);
+    };
+    let saved: string | null = null;
+    try { saved = localStorage.getItem(KEY); } catch {}
+    showFace(saved);
     Object.assign(face.style, { position: "absolute", left: "0", top: "0", padding: "0", border: "0", background: "none", borderRadius: "50%", cursor: "grab", touchAction: "none", willChange: "transform" });
     stage.append(svg, face);
+
+    // Only on the toy's own page (the index tiles take no input): a button to use your own picture.
+    const own = stage.id === "stage";
+    const bar = document.createElement("div");
+    if (own) {
+      Object.assign(bar.style, { position: "absolute", left: "50%", bottom: "16px", transform: "translateX(-50%)", display: "flex", gap: "8px" });
+      const pill = "display:inline-flex;align-items:center;height:44px;padding:0 16px;border-radius:999px;border:1px solid var(--hair);background:var(--paper);color:var(--ink);font:500 14px/1 inherit;cursor:pointer";
+      const pick = document.createElement("label");
+      pick.style.cssText = pill;
+      pick.textContent = "Your picture";
+      const input = document.createElement("input");
+      input.type = "file"; input.accept = "image/*"; input.hidden = true;
+      pick.append(input);
+      const clear = document.createElement("button");
+      clear.type = "button"; clear.style.cssText = pill; clear.textContent = "Remove";
+      const sync = (url: string | null) => { showFace(url); clear.style.display = url ? "" : "none"; };
+      sync(saved);
+      input.addEventListener("change", () => {
+        const file = input.files?.[0];
+        if (!file) return;
+        const raw = URL.createObjectURL(file), im = new Image();
+        im.onload = () => {
+          // Centre-crop to a 256px square so it fits storage and the circle.
+          const c = document.createElement("canvas"); c.width = c.height = 256;
+          const side = Math.min(im.naturalWidth, im.naturalHeight);
+          c.getContext("2d")!.drawImage(im, (im.naturalWidth - side) / 2, (im.naturalHeight - side) / 2, side, side, 0, 0, 256, 256);
+          URL.revokeObjectURL(raw);
+          const url = c.toDataURL("image/jpeg", 0.85);
+          try { localStorage.setItem(KEY, url); } catch {}
+          sync(url);
+        };
+        im.src = raw;
+        input.value = "";
+      });
+      clear.addEventListener("click", () => { try { localStorage.removeItem(KEY); } catch {} sync(null); });
+      bar.append(pick, clear);
+      stage.append(bar);
+    }
 
     let W = 0, H = 0, raf = 0, last = 0;
     let x = 0, y = 0, vx = 0, vy = 0; // offset from rest
     let rot = { X: 0, Y: 0, Z: 0 }, rotV = { X: 0, Y: 0, Z: 0 }, rotTo = { X: 0, Y: 0, Z: 0 };
-    let drag: { id: number; sx: number; sy: number; ox: number; oy: number; moved: boolean } | null = null;
+    let drag: { id: number; sx: number; sy: number; ox: number; oy: number; tx: number; ty: number; moved: boolean } | null = null;
 
     const rest = () => ({ x: W / 2, y: Math.max(Number(p.size) / 2 + 8, H * Number(p.cord) + Number(p.size) / 2) });
     function layout() {
@@ -61,11 +113,11 @@ export const demo: Demo = {
     }
 
     function step(dt: number) {
-      const k = Number(p.tension), c = Number(p.friction), m = Number(p.mass);
-      if (!drag) {
-        vx += ((-k * x - c * vx) / m) * dt; vy += ((-k * y - c * vy) / m) * dt;
-        x += vx * dt; y += vy * dt;
-      }
+      // Let go: the heavy spring home. Held: a stiff, light spring chasing the pointer (alcun.dev's 600/35).
+      const k = drag ? 600 : Number(p.tension), c = drag ? 35 : Number(p.friction), m = drag ? 1 : Number(p.mass);
+      const tx = drag ? drag.tx : 0, ty = drag ? drag.ty : 0;
+      vx += ((-k * (x - tx) - c * vx) / m) * dt; vy += ((-k * (y - ty) - c * vy) / m) * dt;
+      x += vx * dt; y += vy * dt;
       const fk = Number(p.flip), fc = 2 * Math.sqrt(fk) * 0.75; // flips settle with a little overshoot
       for (const a of ["X", "Y", "Z"] as const) { rotV[a] += (fk * (rotTo[a] - rot[a]) - fc * rotV[a]) * dt; rot[a] += rotV[a] * dt; }
     }
@@ -84,8 +136,8 @@ export const demo: Demo = {
 
     face.addEventListener("pointerdown", (e) => {
       try { face.setPointerCapture(e.pointerId); } catch {} face.style.cursor = "grabbing";
-      drag = { id: e.pointerId, sx: e.clientX, sy: e.clientY, ox: x, oy: y, moved: false };
-      vx = vy = 0; wake();
+      drag = { id: e.pointerId, sx: e.clientX, sy: e.clientY, ox: x, oy: y, tx: x, ty: y, moved: false };
+      wake();
     });
     face.addEventListener("pointermove", (e) => {
       if (!drag || e.pointerId !== drag.id) return;
@@ -93,7 +145,8 @@ export const demo: Demo = {
       if (Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) > 4) drag.moved = true;
       const d = Math.hypot(mx, my), max = Number(p.reach);
       if (d > max) { mx = (mx / d) * max; my = (my / d) * max; }
-      x = mx; y = my; paint();
+      drag.tx = mx; drag.ty = my;
+      if (reducedMotion()) { x = mx; y = my; paint(); } else wake();
     });
     const release = (e: PointerEvent) => {
       if (!drag || e.pointerId !== drag.id) return;
@@ -116,7 +169,7 @@ export const demo: Demo = {
     return {
       update(next) { p = next; layout(); wake(); },
       reset() { x = y = vx = vy = 0; rot = { X: 0, Y: 0, Z: 0 }; rotV = { X: 0, Y: 0, Z: 0 }; rotTo = { X: 0, Y: 0, Z: 0 }; paint(); },
-      destroy() { clearTimeout(bobTimer); cancelAnimationFrame(raf); ro.disconnect(); svg.remove(); face.remove(); },
+      destroy() { clearTimeout(bobTimer); cancelAnimationFrame(raf); ro.disconnect(); svg.remove(); face.remove(); bar.remove(); },
     };
   },
 };

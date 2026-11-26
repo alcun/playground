@@ -9,9 +9,11 @@
 
 ### Added
 
+- Pull: hang your own picture on the cord. It stays in your browser and is never uploaded.
 - Every toy page says where the toy first lived, in a line under its controls.
 - Train: the Signalboarder footer train rebuilt in dots, with sliders for carriages, speed, how often one comes, size and rock.
 - Hanging cards: a Cards slider, from 1 up to all 13. The rope always spans the stage, and fewer cards grow to fill it.
+- Pull feels like alcun.dev again: the heavy release spring and the stretchy drag are back, and a plain avatar replaces the smiley face.
 - Hanging cards: Swag goes much further, up to 260px of slack.
 - Theme and Eyes: their index tiles show the whole demo shrunk to fit, instead of a cramped corner of it.
 - Lightbox: the pictures sit centred, three across, and lift and grow a little on hover, as on the Mono Studio site.
